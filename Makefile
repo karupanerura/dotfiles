@@ -1,5 +1,5 @@
 PWD = $(shell pwd)
-ZSHRC_SRC = $(PWD)/zshrc/src.sh
+ZSHRC_SRC = $(PWD)/zsh/rc.sh
 
 .PHONY: zshrc
 install: zshrc

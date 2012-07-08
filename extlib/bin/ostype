@@ -1,4 +1,7 @@
 #!/bin/sh
+### copied from App::llenv
+### Author: riywo
+### https://github.com/riywo/App-llenv
 if [ $OSTYPE = "linux-gnu" ]; then
     LSB_ID=`lsb_release -i | cut -f2 -d:`
     LSB_VERSION=`lsb_release -r | cut -f2 -d:`

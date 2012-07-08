@@ -1,0 +1,2 @@
+#!/bin/sh
+git status --short | cat -n;printf "number>"; read r; $EDITOR `git status --short | cat -n | awk "/^ +$r/{print \\$3}"`

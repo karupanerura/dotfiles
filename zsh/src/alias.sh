@@ -20,4 +20,3 @@ alias tmux="tmux -2 -L karupas_dev"
 alias sync='sync && sync && sync'
 alias dist_init='make clean && rm -rf META.yml MYMETA.yml MYMETA.json inc Makefile.old && perl Makefile.PL'
 alias scp="scp -C"
-alias git_edit='git status --short | cat -n;printf "number>"; read r; emacs `git status --short | cat -n | awk "/^ +$r/{print \\$3}"`'

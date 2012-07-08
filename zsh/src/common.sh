@@ -19,6 +19,9 @@ export HISTFILE=~/.histfile
 export HISTSIZE=10000
 export SAVEHIST=10000
 
+# extlib/binをPATHに追加
+export PATH="$DOTFILES_EXTLIB/bin:$PATH"
+
 # 履歴ファイルに時刻を記録
 setopt extended_history
 

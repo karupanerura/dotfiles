@@ -1,0 +1,8 @@
+--exec "perl -Isite_perl -Ilib -It/lib -MTest::Flatten"
+--color
+--merge
+--timer
+--lib
+--blib
+--recurse
+-w

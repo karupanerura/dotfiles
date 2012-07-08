@@ -7,7 +7,7 @@ install: zshrc
 	mv .zshrc ~/.zshrc
 
 zshrc: $(ZSHRC_SRC)
-	ln -fs $(ZSHRC_SRC) .zshrc
+	echo "source $(ZSHRC_SRC)" > .zshrc
 
 clean:
 	@rm -rf .zshrc

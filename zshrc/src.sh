@@ -1,4 +1,8 @@
-SELF_PATH=$(stat -f '%Y' $0 || echo $0);
+if [ -e $0 ]; then
+    SELF_PATH=$0
+else
+    SELF_PATH=$(stat -f '%Y' $0);
+fi
 DOTFILES_BASEDIR=$(dirname $SELF_PATH);
 DOTFILES_EXTLIB=$(dirname $DOTFILES_BASEDIR)/extlib
 

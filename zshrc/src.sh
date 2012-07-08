@@ -7,3 +7,7 @@ source $DOTFILES_BASEDIR/sources/completion.sh
 source $DOTFILES_BASEDIR/sources/prompt.sh
 source $DOTFILES_BASEDIR/sources/alias.sh
 source $DOTFILES_BASEDIR/sources/misc.sh
+
+if [ -f ~/.zshrc.local ]; then
+    source ~/.zshrc.local
+fi

@@ -5,9 +5,9 @@ PROVERC_SRC = $(PWD)/prove/rc
 PERLTIDYRC_SRC = $(PWD)/perltidy/rc
 
 .PHONY: all
-all: zsh git prove
+all: zsh git prove perltidy
 
-install: zsh git prove
+install: zsh git prove perltidy
 	[[ -e ~/.zshrc ]] && mv ~/.zshrc ~/.zshrc.bak; true
 	mv .zshrc ~/.zshrc
 	[[ -e ~/.gitconfig ]] && mv ~/.gitconfig ~/.gitconfig.bak; true

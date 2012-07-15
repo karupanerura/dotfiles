@@ -5,5 +5,10 @@
 * .gitconfig
 
 # usage
+## fullbuild and install
 1. make
+2. make install
+
+## single build and install
+1. make zshrc
 2. make install

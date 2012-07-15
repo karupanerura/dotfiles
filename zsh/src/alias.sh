@@ -17,7 +17,11 @@ fi;
 
 ## その他alias
 alias tmux="tmux -2 -L karupas_dev"
-alias sync='sync && sync && sync'
 alias dist_init='make clean && rm -rf META.yml MYMETA.yml MYMETA.json inc Makefile.old && perl Makefile.PL'
 alias scp="scp -C"
 alias random_string='perl -MString::Random=random_string -E "say+random_string(q{s} x (\$ARGV[0] || 10))"'
+alias webalize='perl -MTest::TCP -E "exec(qq{plackup -o=localhost -p=@{[ empty_port() ]} -MPlack::App::Directory -e \"Plack::App::Directory->new(root => q{.})->to_app\"})"'
+alias sync='sync && sync && sync'
+alias shutdown='sync && shutdown'
+alias reboot='sync && reboot'
+alias halt='sync && halt'

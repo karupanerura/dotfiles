@@ -1,0 +1,9 @@
+# dotfiles
+* .zshrc
+* .perltidyrc
+* .proverc
+* .gitconfig
+
+# usage
+1. make
+2. make install

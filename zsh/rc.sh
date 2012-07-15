@@ -3,14 +3,15 @@ if [ -e $0 ]; then
 else
     SELF_PATH=$(stat -f '%Y' $0);
 fi
-DOTFILES_BASEDIR=$(dirname $SELF_PATH);
-DOTFILES_EXTLIB=$(dirname $DOTFILES_BASEDIR)/extlib
+ZSHRC_BASEDIR=$(dirname $SELF_PATH);
+DOTFILES_BASEDIR=$(dirname $ZSHRC_BASEDIR);
+DOTFILES_EXTLIB=$DOTFILES_BASEDIR/extlib;
 
-source $DOTFILES_BASEDIR/src/common.sh
-source $DOTFILES_BASEDIR/src/completion.sh
-source $DOTFILES_BASEDIR/src/prompt.sh
-source $DOTFILES_BASEDIR/src/alias.sh
-source $DOTFILES_BASEDIR/src/misc.sh
+source $ZSHRC_BASEDIR/src/common.sh
+source $ZSHRC_BASEDIR/src/completion.sh
+source $ZSHRC_BASEDIR/src/prompt.sh
+source $ZSHRC_BASEDIR/src/alias.sh
+source $ZSHRC_BASEDIR/src/misc.sh
 
 if [ -f ~/.zshrc.local ]; then
     source ~/.zshrc.local

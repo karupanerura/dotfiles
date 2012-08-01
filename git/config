@@ -24,7 +24,12 @@
     changed = green
     untracked = cyan
 [branch]
-    autosetupmerge = true
+    autosetupmerge = false
+    autosetuprebase = always
+[rebase]
+    stat = true
+[merge]
+    stat = true
 [alias]
     st   = status
     ci   = commit
@@ -38,8 +43,9 @@
     edit-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; emacs `f`"
     add-unmerged  = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`"
 [push]
-    default = current
+    default = upstream
 [pull]
-    default = current
+    default = upstream
+    rebase = true
 [rerere]
     enabled = true

@@ -1,4 +1,4 @@
---exec "perl -Isite_perl -Ilib -It/lib -MTest::Flatten"
+--exec "perl -Isite_perl -It/lib -MTest::Flatten"
 --color
 --merge
 --timer

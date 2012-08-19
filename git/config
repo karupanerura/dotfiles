@@ -49,3 +49,5 @@
     rebase = true
 [rerere]
     enabled = true
+[grep]
+    lineNumber = true

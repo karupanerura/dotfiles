@@ -64,6 +64,8 @@ vimrc: .vimrc
 
 emacs: .emacs.d
 .emacs.d: $(EMACSD_SRC)
+	git submodule init
+	git submodule update
 	ln -fs $(EMACSD_SRC) .emacs.d
 
 clean:

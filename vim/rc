@@ -1,0 +1,80 @@
+" .vimrcのエンコーディング指定
+scriptencoding utf-8
+
+" 非互換モード
+set nocompatible
+
+" バックアップファイルやスワップファイルをtmp以下に
+set directory=~/.vim/tmp/swap
+set backupdir=~/.vim/tmp/backup
+
+" アンドゥ履歴をファイルに保存。tmp以下に
+if has('persistent_undo')
+  set undodir=~/.vim/tmp/undo
+  set undofile
+endif
+
+" 文字コードの自動認識
+set encoding=utf-8
+set fileencodings=ucs-bom,iso-2022-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,utf-8
+
+" 改行コードの自動認識
+set fileformats=unix,dos,mac
+
+" □とか○の文字があってもカーソル位置がずれないようにする
+if exists('&ambiwidth')
+  set ambiwidth=double
+endif
+
+" display
+" ----------------------
+set autochdir
+set number
+set cursorline
+highlight LineNr ctermfg=darkgrey
+set ruler
+set cmdheight=2
+set laststatus=2
+
+" statusline
+set statusline=%<%f\ %m%r%h%w%y%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%=%4v\ %l/%L
+set title
+set linespace=0
+set shiftwidth=4
+set shiftround
+set tabstop=4
+set expandtab
+set showmatch
+set showmode
+set wildmenu
+set showcmd
+"set textwidth=78
+"set columns=100
+"set lines=150
+" ---------------------
+syntax on
+colorscheme ron
+filetype on
+filetype plugin on
+filetype indent on
+
+" .psgiや.tもperlと見なす
+au BufNewFile,BufRead *.psgi set filetype=perl
+au BufNewFile,BufRead *.t    set filetype=perl
+
+" コマンドライン補完。最長共通部分を補完しつつ候補をstatuslineに表示した後、
+" 候補を順に回る
+set wildmenu
+set wildmode=longest:full,full
+
+" タブを可視化
+set list
+set listchars=tab:>\ 
+
+" 全角スペースとタブ文字の可視化
+highlight JpSpace cterm=underline ctermfg=Blue guifg=Blue
+au BufRead,BufNew * match JpSpace \　 \	
+
+" ウィンドウ分割で上や左にではなく右や下に開くように
+set splitright
+set splitbelow

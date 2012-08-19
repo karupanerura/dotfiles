@@ -5,11 +5,12 @@ PROVERC_SRC    = $(PWD)/prove/rc
 PERLTIDYRC_SRC = $(PWD)/perltidy/rc
 TMUXCONF_SRC   = $(PWD)/tmux/conf
 SCREENRC_SRC   = $(PWD)/screen/rc
+VIMRC_SRC      = $(PWD)/vim/rc
 
 .PHONY: all
-all: zsh git prove perltidy screenrc tmuxconf
+all: zsh git prove perltidy screenrc tmuxconf vimrc
 
-install: zsh git prove perltidy
+install: zsh git prove perltidy screenrc tmuxconf vimrc
 	[[ -e ~/.zshrc ]] && mv ~/.zshrc ~/.zshrc.bak; true
 	mv .zshrc ~/.zshrc
 	[[ -e ~/.gitconfig ]] && mv ~/.gitconfig ~/.gitconfig.bak; true
@@ -22,6 +23,11 @@ install: zsh git prove perltidy
 	mv .tmux.conf ~/.tmux.conf
 	[[ -e ~/.screenrc ]] && mv ~/.screenrc ~/.screenrc.bak; true
 	mv .screenrc ~/.screenrc
+	[[ -e ~/.vimrc ]] && mv ~/.vimrc ~/.vimrc.bak; true
+	[[ -e ~/.vim/tmp/swap   ]] || mkdir -p ~/.vim/tmp/swap;   true
+	[[ -e ~/.vim/tmp/backup ]] || mkdir -p ~/.vim/tmp/backup; true
+	[[ -e ~/.vim/tmp/undo   ]] || mkdir -p ~/.vim/tmp/undo;   true
+	mv .vimrc ~/.vimrc
 
 zsh: .zshrc
 .zshrc: $(ZSHRC_SRC)
@@ -48,6 +54,10 @@ tmuxconf: .tmux.conf
 screenrc: .screenrc
 .screenrc: $(SCREENRC_SRC)
 	ln -fs $(SCREENRC_SRC) .screenrc
+
+vimrc: .vimrc
+.vimrc: $(VIMRC_SRC)
+	ln -fs $(VIMRC_SRC) .vimrc
 
 clean:
 	@rm -rf .zshrc .gitconfig .proverc

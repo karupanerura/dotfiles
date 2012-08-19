@@ -5,6 +5,7 @@
 * .gitconfig
 * .tmux.conf
 * .screenrc
+* .vimrc
 
 # usage
 ## fullbuild and install

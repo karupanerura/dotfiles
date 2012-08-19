@@ -10,8 +10,10 @@
 
 # usage
 ## fullbuild and install
-1. make
-2. make install
+1. git submodule init
+2. git submodule update
+3. make
+4. make install
 
 ## single build and install
 1. make zshrc

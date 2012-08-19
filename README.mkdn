@@ -1,3 +1,6 @@
+# what is this?
+おれおれdotfiles
+
 # dotfiles
 * .zshrc
 * .perltidyrc
@@ -18,3 +21,7 @@
 ## single build and install
 1. make zshrc
 2. make install
+
+# FAQ
+Q. バナナはおやつに入りますか？
+A. 君がそれを望むならば

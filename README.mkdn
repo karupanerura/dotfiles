@@ -13,12 +13,12 @@
 
 # usage
 ## fullbuild and install
-1. make
-2. make install
+1. ./setup.pl build
+2. ./setup.pl install
 
 ## single build and install
-1. make zshrc
-2. make install
+1. ./setup.pl zshrc
+2. ./setup.pl install
 
 # FAQ
 Q. バナナはおやつに入りますか？

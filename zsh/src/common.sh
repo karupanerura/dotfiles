@@ -30,8 +30,6 @@ setopt long_list_jobs
 
 ## 全てのユーザのログイン・ログアウトを監視する。
 watch="all"
-## ログイン時にはすぐに表示する。
-log
 
 ## ^Dでログアウトしないようにする。
 setopt ignore_eof

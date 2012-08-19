@@ -43,9 +43,8 @@
     edit-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; emacs `f`"
     add-unmerged  = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`"
 [push]
-    default = upstream
+    default = current
 [pull]
-    default = upstream
     rebase = true
 [rerere]
     enabled = true

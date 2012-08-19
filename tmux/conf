@@ -1,0 +1,61 @@
+set-option -g prefix C-]
+unbind-key C-b
+bind-key C-] send-prefix
+
+set-window-option -g utf8 on
+
+# View
+# ステータスライン更新間隔(秒)
+set -g status-interval 5
+set -g status-left-length 100
+set -g status-right-length 50
+set -g default-path $HOME
+
+# www1.hoge.com -> www1のみ表示。
+set-option -g set-titles-string "@#(hostname | sed 's/\\\\..*//')"
+
+# ステータスラインカスタム関連
+set -g status-bg black
+set -g status-fg white
+set -g status-attr dim
+# 左部:whoami@hostname
+set -g status-left '#[fg=green,bold][#20(whoami)@#H]#[default]'
+# 右部:[2011/03/06(Sun)20:21]
+set -g status-right '#[fg=green,bold][%Y/%m/%d(%a)%H:%M]#[default]'
+set -g message-attr bold
+set -g message-fg white
+set -g message-bg red
+
+set -g pane-active-border-fg white
+set -g pane-active-border-bg black
+
+set-window-option -g mode-bg white
+set-window-option -g mode-fg black
+set-window-option -g window-status-bg black
+set-window-option -g window-status-fg white
+set-window-option -g window-status-current-bg green
+set-window-option -g window-status-current-fg black
+set-window-option -g window-status-current-attr bold
+
+# KeyBindings
+# 直前のウィンドウ
+bind C-q last-window
+# 設定リロード
+bind r source-file ~/.tmux.conf
+# ウィンドウ選択画面
+bind Space choose-window
+# 新ウィンドウ作成
+bind c new-window
+# 分割していたペインそれぞれをWindowに
+bind b break-pane
+# ペインの縦分割
+bind h split-window -v
+# ペインの横分割
+bind v split-window -h
+
+# ペイン終了
+bind k kill-pane
+# ウィンドウ終了
+bind K kill-window
+# ペイン番号表示
+bind i display-panes

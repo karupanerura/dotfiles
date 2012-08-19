@@ -1,0 +1,37 @@
+source defaults
+# 現在のウィンドウに対して可視ベルの設定します。
+vbell off
+# ハングアップしたときにscreenは自動的にデタッチ
+autodetach on
+# 起動時に著作権表示
+startup_message off
+# スクロールバックバッファの大きさ
+defscrollback 10000
+# ターミナル
+term xterm-256color
+
+# 文字コードまわり
+export LANG=ja_JP.UTF-8
+export JLESSCHARSET=japanese
+
+defutf8 on
+defkanji utf-8
+encoding utf-8 utf-8
+defencoding utf-8
+cjkwidth on
+
+# status line
+hardstatus ignore "%w | %h"
+hardstatus alwayslastline " %`%-w%{=b bw}%n %t%{-}%+w"
+caption always "%{= wk} %-w%{=bu dr}%n %t%{-}%+w %= %{=b wb}%y/%m/%d %{=b wb}%c"
+
+escape ^]a
+
+# caption
+caption always "%{=r dd}%`%-w%{+b WK}%n %t%{-}%+w %= [%02c]"
+sorendition "+rb .G"
+
+# ログ取る
+logfile ”/home/bk-sato/lg/screen-%Y%m%d-%n.log”
+log on
+deflog on

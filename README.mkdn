@@ -3,6 +3,8 @@
 * .perltidyrc
 * .proverc
 * .gitconfig
+* .tmux.conf
+* .screenrc
 
 # usage
 ## fullbuild and install

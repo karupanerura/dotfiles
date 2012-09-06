@@ -42,6 +42,7 @@
     wt   = whatchanged --stat
     edit-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; emacs `f`"
     add-unmerged  = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`"
+    ck   = "!git status --short | awk '{print $2}' | egrep '\\.(t|p([lm]|sgi))$' | xargs -n 1 perl -wc"
 [push]
     default = current
 [pull]

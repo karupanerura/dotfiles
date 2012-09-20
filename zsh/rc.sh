@@ -12,6 +12,7 @@ source $ZSHRC_BASEDIR/src/completion.sh
 source $ZSHRC_BASEDIR/src/prompt.sh
 source $ZSHRC_BASEDIR/src/misc.sh
 source $ZSHRC_BASEDIR/src/alias.sh
+source $ZSHRC_BASEDIR/src/function.sh
 
 if [ -f ~/.zshrc.local ]; then
     source ~/.zshrc.local

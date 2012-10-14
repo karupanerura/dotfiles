@@ -1,7 +1,7 @@
 [include]
     path = .gitconfig.local
 [core]
-    editor = emacs
+    editor = emacsclient -nw -c
     pager  = lv
     whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
     excludesfile = .gitignore

@@ -111,9 +111,18 @@ if type ggrep > /dev/null 2>&1; then
     alias grep=ggrep
 fi
 
-## emacsを使う。
-export EDITOR=emacs
+## emacsを使う。(emacsclient)
+export EDITOR="emacsclient -nw -c"
+export VISUAL="emacsclient -nw -c"
 ## emacsがなくてもemacsでvimを起動する。
 if ! type emacs > /dev/null 2>&1; then
-    alias emacs=vim
+    alias emacs="vim"
+else
+    ## emacs
+    if ps x | grep emacs | grep '\--daemon' > /dev/null 2>&1; then
+        echo "[INFO] lived 'emacs --daemon'"
+    else
+        echo "[INFO] start 'emacs --daemon'"
+        env emacs --daemon
+    fi
 fi

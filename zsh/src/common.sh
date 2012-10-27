@@ -136,8 +136,8 @@ function emacs_server_restart {
 }
 
 ## emacsを使う。(emacsclient)
-export EDITOR="emacsclient -nw -c"
-export VISUAL="emacsclient -nw -c"
+export EDITOR="emacsclient -nw"
+export VISUAL="emacsclient -nw"
 ## emacsがなくてもemacsでvimを起動する。
 if ! type emacs > /dev/null 2>&1; then
     alias emacs="vim"

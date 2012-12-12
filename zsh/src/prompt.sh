@@ -15,13 +15,27 @@ autoload -U colors; colors;
 
 # ここの部分を作る
 # [branch:master](modified)(untracked)
+GIT_PROMPT_COLOR_DIRTY="%{$fg[red]%}"
+GIT_PROMPT_COLOR_CLEAN="%{$fg[green]%}"
 function git_prompt {
     # ブランチ名が取れなければ何もしないよ
     GIT_CURRENT_BRANCH=$( git branch &> /dev/null | grep '^\*' | cut -b 3- )
-    if [ ${GIT_CURRENT_BRANCH} ]
-    then
-        GIT_BRANCH="$( git_prompt_color )$PROMPT_PAREN[1]branch:${GIT_CURRENT_BRANCH}$PROMPT_PAREN[2]%{${reset_color}%}"
-        echo "[${GIT_BRANCH}]$( git_status )"
+    if [ ${GIT_CURRENT_BRANCH} ]; then
+        # ステータスの取得
+        GIT_CURRENT_STATUS=$( git_status );
+
+        # レポジトリが綺麗ならグリーン、汚ければレッドに色づけするよ
+        GIT_PROMPT_COLOR='';
+        if [ $GIT_CURRENT_STATUS ]; then
+            GIT_PROMPT_COLOR=$GIT_PROMPT_COLOR_DIRTY;
+        else
+            GIT_PROMPT_COLOR=$GIT_PROMPT_COLOR_CLEAN;
+        fi
+
+        # 色付けと出力
+        GIT_BRANCH="${GIT_PROMPT_COLOR}$PROMPT_PAREN[1]branch:${GIT_CURRENT_BRANCH}$PROMPT_PAREN[2]%{${reset_color}%}"
+        GIT_CURRENT_STATUS="%{$fg[yellow]%}${GIT_CURRENT_STATUS}%{${reset_color}%}"
+        echo "[${GIT_BRANCH}]${GIT_CURRENT_STATUS}"
     fi
 }
 
@@ -33,47 +47,35 @@ GIT_PROMPT_DELETED="(deleted)"
 GIT_PROMPT_RENAMED="(renamed)"
 GIT_PROMPT_UNMERGED="(unmerged)"
 GIT_PROMPT_UNTRACKED="(untracked)"
+GIT_PROMPT_UNKNOWN="(unknown)"
 function git_status {
-    GIT_INDEX=$(git status --porcelain 2> /dev/null)
     GIT_STATUS=''
-    if $(echo "$GIT_INDEX" | grep '^?? ' &> /dev/null); then
-        GIT_STATUS="$GIT_PROMPT_UNTRACKED$GIT_STATUS"
-    fi
-    if $(echo "$GIT_INDEX" | grep '^A ' &> /dev/null); then
-        GIT_STATUS="$GIT_PROMPT_ADDED$GIT_STATUS"
-    elif $(echo "$GIT_INDEX" | grep '^M ' &> /dev/null); then
-        GIT_STATUS="$GIT_PROMPT_ADDED$GIT_STATUS"
-    fi
-    if $(echo "$GIT_INDEX" | grep '^ M ' &> /dev/null); then
-        GIT_STATUS="$GIT_PROMPT_MODIFIED$GIT_STATUS"
-    elif $(echo "$GIT_INDEX" | grep '^AM ' &> /dev/null); then
-        GIT_STATUS="$GIT_PROMPT_MODIFIED$GIT_STATUS"
-    elif $(echo "$GIT_INDEX" | grep '^ T ' &> /dev/null); then
-        GIT_STATUS="$GIT_PROMPT_MODIFIED$GIT_STATUS"
-    fi
-    if $(echo "$GIT_INDEX" | grep '^R ' &> /dev/null); then
-        GIT_STATUS="$GIT_PROMPT_RENAMED$GIT_STATUS"
-    fi
-    if $(echo "$GIT_INDEX" | grep '^ D ' &> /dev/null); then
-        GIT_STATUS="$GIT_PROMPT_DELETED$GIT_STATUS"
-    elif $(echo "$GIT_INDEX" | grep '^AD ' &> /dev/null); then
-        GIT_STATUS="$GIT_PROMPT_DELETED$GIT_STATUS"
-    fi
-    if $(echo "$GIT_INDEX" | grep '^UU ' &> /dev/null); then
-        GIT_STATUS="$GIT_PROMPT_UNMERGED$GIT_STATUS"
-    fi
-    echo "%{$fg[yellow]%}${GIT_STATUS}%{${reset_color}%}"
-}
-
-# レポジトリが綺麗ならグリーン、汚ければレッドに色づけするよ
-GIT_PROMPT_COLOR_DIRTY="%{$fg[red]%}"
-GIT_PROMPT_COLOR_CLEAN="%{$fg[green]%}"
-function git_prompt_color {
-    if [[ -n $(git status -s --ignore-submodules=dirty 2> /dev/null) ]]; then
-        echo "${GIT_PROMPT_COLOR_DIRTY}"
-    else
-        echo "${GIT_PROMPT_COLOR_CLEAN}"
-    fi
+    for ST in $(git status --porcelain 2> /dev/null | cut -b -2 | sed -e 's/\s/S/' | sort | uniq); do
+        case $ST in
+            ??)
+                GIT_STATUS="$GIT_PROMPT_UNTRACKED$GIT_STATUS"
+                ;;
+            AS|MS)
+                GIT_STATUS="$GIT_PROMPT_ADDED$GIT_STATUS"
+                ;;
+            AM|SM|ST)
+                GIT_STATUS="$GIT_PROMPT_MODIFIED$GIT_STATUS"
+                ;;
+            SR)
+                GIT_STATUS="$GIT_PROMPT_RENAMED$GIT_STATUS"
+                ;;
+            AD|SD)
+                GIT_STATUS="$GIT_PROMPT_DELETED$GIT_STATUS"
+                ;;
+            UU)
+                GIT_STATUS="$GIT_PROMPT_UNMERGED$GIT_STATUS"
+                ;;
+            *)
+                GIT_STATUS="$GIT_PROMPT_UNKNOWN$GIT_STATUS"
+                ;;
+        esac
+    done
+    echo $GIT_STATUS
 }
 
 precmd()

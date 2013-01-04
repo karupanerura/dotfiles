@@ -1,17 +1,25 @@
 # プロンプトの設定
-#PROMPT='[%n@%M %~]$ '
-paren="[]"
-PROMPT="%{%}$paren[1]%n@%m %~$paren[2]%(!.#.$)%{%} "
-
-_update_rprompt () {
-    RPROMPT="$( git_prompt )";
-}
-
-_set_env_git_current_branch() {
-  GIT_CURRENT_BRANCH=$( git branch &> /dev/null | grep '^\*' | cut -b 3- )
-}
-
 autoload -U colors; colors;
+
+#PROMPT='[%n@%M %~]$ '
+PROMPT_BASE="%{$fg[blue]%}%D{%Y-%m-%d %H:%M:%S}%{${reset_color}%} %{$fg[green]%}%~%{${reset_color}%} %{$fg[red]%}%(!.#.%%)%{%}%{${reset_color}%} "
+
+PROMPT_BG_DANGER="${bg[red]}"
+function _update_prompt {
+    if [ `whoami` = 'root' ]; then
+        PROMPT="$PROMPT_BG_DANGER$PROMPT_BASE"
+    else
+        PROMPT=$PROMPT_BASE
+    fi
+}
+
+function _update_rprompt {
+    RPROMPT="%{$fg[blue]%}%{%}%n@%m%{${reset_color}%} $( git_prompt )";
+}
+
+function _set_env_git_current_branch {
+    GIT_CURRENT_BRANCH=$( git branch &> /dev/null | grep '^\*' | cut -b 3- )
+}
 
 # ここの部分を作る
 # [branch:master](modified)(untracked)
@@ -78,16 +86,17 @@ function git_status {
     echo $GIT_STATUS
 }
 
-precmd()
-{
-  _set_env_git_current_branch
-  _update_rprompt
+precmd () {
+    _set_env_git_current_branch
+    _update_rprompt
 }
 
-chpwd()
-{
-  _set_env_git_current_branch
-  _update_rprompt
-  ls
+chpwd () {
+    _set_env_git_current_branch
+    _update_rprompt
+    ls
 }
 
+_set_env_git_current_branch
+_update_prompt
+_update_rprompt

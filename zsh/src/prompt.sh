@@ -52,7 +52,7 @@ function git_status {
     GIT_STATUS=''
     for ST in $(git status --porcelain 2> /dev/null | cut -b -2 | sed -e 's/\s/S/' | sort | uniq); do
         case $ST in
-            ??)
+            '??')
                 GIT_STATUS="$GIT_PROMPT_UNTRACKED$GIT_STATUS"
                 ;;
             AS|MS)

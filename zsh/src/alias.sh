@@ -5,15 +5,18 @@ alias mv="mv -i"
 alias crontab="crontab -i"
 
 # ls系alias
-if $DOTFILES_EXTLIB/bin/ostype | grep -E "(FreeBSD|Darwin)" > /dev/null 2>&1 ; then
-    alias ls="ls -G"
-    alias la="ls -Ga"
-    alias ll="ls -GlA"
-else
-    alias ls="ls -hbF --color=auto"
-    alias la="ls -hbaF --color=auto"
-    alias ll="ls -hblaF --color=auto"
-fi;
+case $( $DOTFILES_EXTLIB/bin/ostype ) in
+    FreeBSD|Darwin)
+        alias ls="ls -G"
+        alias la="ls -Ga"
+        alias ll="ls -GlA"
+        ;;
+    *)
+        alias ls="ls -hbF --color=auto"
+        alias la="ls -hbaF --color=auto"
+        alias ll="ls -hblaF --color=auto"
+        ;;
+esac
 
 ## その他alias
 alias tmux="tmux -2 -L karupas_dev"

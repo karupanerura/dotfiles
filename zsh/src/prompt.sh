@@ -18,7 +18,7 @@ function _update_rprompt {
 }
 
 function _set_env_git_current_branch {
-    GIT_CURRENT_BRANCH=$( git branch &> /dev/null | grep '^\*' | cut -b 3- )
+    GIT_CURRENT_BRANCH=$(basename "`git symbolic-ref HEAD 2> /dev/null`")
 }
 
 # ここの部分を作る
@@ -27,8 +27,7 @@ GIT_PROMPT_COLOR_DIRTY="%{$fg[red]%}"
 GIT_PROMPT_COLOR_CLEAN="%{$fg[green]%}"
 function git_prompt {
     # ブランチ名が取れなければ何もしないよ
-    GIT_CURRENT_BRANCH=$( git branch &> /dev/null | grep '^\*' | cut -b 3- )
-    if [ ${GIT_CURRENT_BRANCH} ]; then
+    if [ $GIT_CURRENT_BRANCH ]; then
         # ステータスの取得
         GIT_CURRENT_STATUS=$( git_status );
 
@@ -57,32 +56,62 @@ GIT_PROMPT_UNMERGED="(unmerged)"
 GIT_PROMPT_UNTRACKED="(untracked)"
 GIT_PROMPT_UNKNOWN="(unknown)"
 function git_status {
-    GIT_STATUS=''
+    GIT_STATUS_ADDED=0
+    GIT_STATUS_MODIFIED=0
+    GIT_STATUS_DELETED=0
+    GIT_STATUS_RENAMED=0
+    GIT_STATUS_UNMERGED=0
+    GIT_STATUS_UNTRACKED=0
+    GIT_STATUS_UNKNOWN=0
     for ST in $(git status --porcelain 2> /dev/null | cut -b -2 | sed -e 's/\s/S/' | sort | uniq); do
         case $ST in
             '??')
-                GIT_STATUS="$GIT_PROMPT_UNTRACKED$GIT_STATUS"
+                GIT_STATUS_UNTRACKED=1                
                 ;;
             AS|MS)
-                GIT_STATUS="$GIT_PROMPT_ADDED$GIT_STATUS"
+                GIT_STATUS_ADDED=1
                 ;;
-            AM|SM|ST)
-                GIT_STATUS="$GIT_PROMPT_MODIFIED$GIT_STATUS"
+            AM|SM|ST|MM)
+                GIT_STATUS_MODIFIED=1
                 ;;
             SR)
-                GIT_STATUS="$GIT_PROMPT_RENAMED$GIT_STATUS"
+                GIT_STATUS_RENAMED=1
                 ;;
             AD|SD)
-                GIT_STATUS="$GIT_PROMPT_DELETED$GIT_STATUS"
+                GIT_STATUS_DELETED=1        
                 ;;
             UU)
-                GIT_STATUS="$GIT_PROMPT_UNMERGED$GIT_STATUS"
+                GIT_STATUS_UNMERGED=1
                 ;;
             *)
-                GIT_STATUS="$GIT_PROMPT_UNKNOWN$GIT_STATUS"
+                GIT_STATUS_UNKNOWN=1
                 ;;
         esac
     done
+
+    GIT_STATUS=''
+    if [ $GIT_STATUS_UNTRACKED = 1 ]; then
+        GIT_STATUS="$GIT_PROMPT_UNTRACKED$GIT_STATUS"
+    fi
+    if [ $GIT_STATUS_ADDED = 1 ]; then
+        GIT_STATUS="$GIT_PROMPT_ADDED$GIT_STATUS"
+    fi
+    if [ $GIT_STATUS_MODIFIED = 1 ]; then
+        GIT_STATUS="$GIT_PROMPT_MODIFIED$GIT_STATUS"
+    fi
+    if [ $GIT_STATUS_RENAMED = 1 ]; then
+        GIT_STATUS="$GIT_PROMPT_RENAMED$GIT_STATUS"
+    fi
+    if [ $GIT_STATUS_DELETED = 1 ]; then
+        GIT_STATUS="$GIT_PROMPT_DELETED$GIT_STATUS"
+    fi
+    if [ $GIT_STATUS_UNMERGED = 1 ]; then
+        GIT_STATUS="$GIT_PROMPT_UNMERGED$GIT_STATUS"
+    fi
+    if [ $GIT_STATUS_UNKNOWN = 1 ]; then
+        GIT_STATUS="$GIT_PROMPT_UNKNOWN$GIT_STATUS"
+    fi
+
     echo $GIT_STATUS
 }
 

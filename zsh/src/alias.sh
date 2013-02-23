@@ -6,7 +6,7 @@ alias crontab="crontab -i"
 
 # ls系alias
 case $( $DOTFILES_EXTLIB/bin/ostype ) in
-    FreeBSD|Darwin)
+    FreeBSD*|Darwin*)
         alias ls="ls -G"
         alias la="ls -Ga"
         alias ll="ls -GlA"

@@ -43,6 +43,7 @@
     edit-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; emacs `f`"
     add-unmerged  = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`"
     ck   = "!git status --short | awk '{print $2}' | egrep '\\.(t|p([lm]|sgi))$' | xargs -n 1 -P0 perl -wc"
+    fetch-pulls = fetch origin +refs/pull/*:refs/remotes/pull/*
 [push]
     default = current
 [pull]
@@ -53,3 +54,5 @@
     lineNumber = true
 [help]
     autocorrect = 1
+[github]
+    user = karupanerura

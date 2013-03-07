@@ -14,11 +14,11 @@ function _update_prompt {
 }
 
 function _update_rprompt {
-    RPROMPT="%{$fg[blue]%}%{%}%n@%m%{${reset_color}%} $( git_prompt )";
+    RPROMPT="%{$fg[blue]%}%{%}%n@%m%{${reset_color}%} [%{$fg[green]%}perl:$( plenv_perl_version )%{${reset_color}%}] $( git_prompt )";
 }
 
 function _set_env_git_current_branch {
-    GIT_CURRENT_BRANCH=$(basename "`git symbolic-ref HEAD 2> /dev/null`")
+    GIT_CURRENT_BRANCH=$([[ -d .git ]] && cat .git/HEAD | cut -d/ -f 3-);
 }
 
 # ここの部分を作る

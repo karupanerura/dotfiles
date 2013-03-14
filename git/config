@@ -44,6 +44,7 @@
     add-unmerged  = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`"
     ck   = "!git status --short | awk '{print $2}' | egrep '\\.(t|p([lm]|sgi))$' | xargs -n 1 -P0 perl -wc"
     fetch-pulls = fetch origin +refs/pull/*:refs/remotes/pull/*
+    fetch-all   = "!find ~/project -maxdepth 3 -name .git -type d | xargs -P3 -n1 -I% git --git-dir=% fetch"
 [push]
     default = current
 [pull]

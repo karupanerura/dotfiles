@@ -30,6 +30,7 @@
     stat = true
 [merge]
     stat = true
+    ff   = false
 [alias]
     st   = status
     ci   = commit

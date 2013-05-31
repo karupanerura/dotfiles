@@ -32,20 +32,22 @@
     stat = true
     ff   = false
 [alias]
-    st   = status
-    ci   = commit
-    br   = branch
-    co   = checkout
-    df   = diff
-    lg   = log -p
-    url  = config --get remote.origin.url
-    tree = log --graph --pretty='format:%C(yellow)%h%Creset %s %Cgreen(%an)%Creset %Cred%d%Creset'
-    wt   = whatchanged --stat
+    st            = status
+    ci            = commit
+    br            = branch
+    co            = checkout
+    df            = diff
+    dw            = diff -w --word-diff
+    lg            = log -p
+    url           = config --get remote.origin.url
+    tree          = log --graph --pretty='format:%C(yellow)%h%Creset %s %Cgreen(%an)%Creset %Cred%d%Creset'
+    wt            = whatchanged --stat
     edit-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; emacs `f`"
     add-unmerged  = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`"
-    ck   = "!git status --short | awk '{print $2}' | egrep '\\.(t|p([lm]|sgi))$' | xargs -n 1 -P0 perl -wc"
-    fetch-pulls = fetch origin +refs/pull/*:refs/remotes/pull/*
-    fetch-all   = "!find ~/project -maxdepth 3 -name .git -type d | xargs -P3 -n1 -I% git --git-dir=% fetch"
+    ck            = "!git status --short | awk '{print $2}' | egrep '\\.(t|p([lm]|sgi))$' | xargs -n 1 -P0 perl -wc"
+    ck-commit     = "!f() { COMMIT=$1; test -z $COMMIT && COMMIT='HEAD'; TEMPDIR=$(printf '/tmp/%d' $$); mkdir -p $TEMPDIR; CHANGED_FILES=`git show $COMMIT | fgrep '+++ b/' | grep -E  '.(p([lm]|sgi)|t)$' | cut -d' ' -f 2 | cut -d/ -f 2-`; echo $CHANGED_FILES | xargs -I% -n1 -P0 sh -c 'mkdir -p `dirname ${1}/%`; git show ${2}:% > ${1}/%' -- $TEMPDIR $COMMIT; find $TEMPDIR -type f | xargs -n1 -P0 perl -wc; rm -rf $TEMPDIR; }; f $@"
+    fetch-pulls   = fetch origin +refs/pull/*:refs/remotes/pull/*
+    fetch-all     = "!find ~/project -maxdepth 3 -name .git -type d | xargs -P3 -n1 -I% git --git-dir=% fetch"
 [push]
     default = current
 [pull]

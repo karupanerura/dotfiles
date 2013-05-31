@@ -29,4 +29,8 @@ alias sync='sync && sync && sync'
 alias shutdown='sync && shutdown'
 alias reboot='sync && reboot'
 alias halt='sync && halt'
-alias autocommitd='perl -MFilesys::Notify::Simple -E "my \$w = Filesys::Notify::Simple->new([@ARGV]); \$w->wait(sub { qx/git add \$_->{path}\\n; git commit -m \"edited \$_->{path}\"/ for @_ }) while 1;"'
+alias autocommitd='perl -MFilesys::Notify::Simple -E "my \$w = Filesys::Notify::Simple->new([@ARGV || "."]); \$w->wait(sub { qx/git add \$_->{path}; git commit -m \"edited \$_->{path}\"/ for grep { \$_->{path} !~ m{\.(?:git|svn)/} } @_ }) while 1;"'
+alias rot13='tr a-mn-zA-MN-Z0-45-9 n-za-mA-MN-Z5-90-4'
+alias uri_escape="perl -MURI::Escape=uri_escape -E 'say uri_escape \$_ for @ARGV'"
+alias uri_unescape="perl -MURI::Escape=uri_unescape -E 'say uri_unescape \$_ for @ARGV'"
+alias whitespace_fix="perl -i -pe 's/\s+$/\n/'"

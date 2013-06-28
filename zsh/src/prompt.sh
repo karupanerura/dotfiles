@@ -2,7 +2,7 @@
 autoload -U colors; colors;
 
 #PROMPT='[%n@%M %~]$ '
-PROMPT_BASE="%{$fg[blue]%}%D{%Y-%m-%d %H:%M:%S}%{${reset_color}%} %{$fg[green]%}%~%{${reset_color}%} %{$fg[red]%}%(!.#.%%)%{%}%{${reset_color}%} "
+PROMPT_BASE="%{$fg[blue]%}|%D{%Y-%m-%d %H:%M:%S}|%{${reset_color}%} %{$fg[green]%}[%~]%{${reset_color}%} %{$fg[red]%}%(!.#.%%)%{%}%{${reset_color}%} "
 
 PROMPT_BG_DANGER="${bg[red]}"
 function _update_prompt {

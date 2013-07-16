@@ -52,6 +52,7 @@ use Cwd qw/chdir/;
 use File::Basename qw/dirname/;
 use File::Spec::Functions qw/rel2abs catfile/;
 
+our $TEMP = '.home';
 our $HOME;
 if (do { local $@; eval { require File::HomeDir; 1 } }) {
     $HOME = File::HomeDir->my_home;
@@ -69,15 +70,18 @@ sub new {
     my $cwd = rel2abs(dirname(__FILE__));
     chdir($cwd);
 
+    mkdir $TEMP;
     return bless +{
-        zshrc_src      => catfile($cwd, 'zsh',      'rc.sh'),
-        gitconfig_src  => catfile($cwd, 'git',      'config'),
-        proverc_src    => catfile($cwd, 'prove',    'rc'),
-        perltidyrc_src => catfile($cwd, 'perltidy', 'rc'),
-        tmuxconf_src   => catfile($cwd, 'tmux',     'conf'),
-        screenrc_src   => catfile($cwd, 'screen',   'rc'),
-        vimrc_src      => catfile($cwd, 'vim',      'rc'),
-        emacsd_src     => catfile($cwd, 'emacs'),
+        bin_dir          => catfile($cwd, 'bin'),
+        zshrc_src        => catfile($cwd, 'zsh',      'rc.sh'),
+        gitconfig_src    => catfile($cwd, 'git',      'config'),
+        git_template_dir => catfile($cwd, 'git',      'template'),
+        proverc_src      => catfile($cwd, 'prove',    'rc'),
+        perltidyrc_src   => catfile($cwd, 'perltidy', 'rc'),
+        tmuxconf_src     => catfile($cwd, 'tmux',     'conf'),
+        screenrc_src     => catfile($cwd, 'screen',   'rc'),
+        vimrc_src        => catfile($cwd, 'vim',      'rc'),
+        emacsd_src       => catfile($cwd, 'emacs'),
     } => $class;
 }
 
@@ -115,7 +119,7 @@ sub build {
     my $self = shift;
 
     # dependency
-    my @dependency = qw/zsh git prove perltidy screenrc tmuxconf vimrc emacs/;
+    my @dependency = qw/bin zsh git prove perltidy screenrc tmuxconf vimrc emacs/;
     $self->$_ for @dependency;
 }
 
@@ -123,11 +127,11 @@ sub install {
     my $self = shift;
 
     # dependency
-    my @dependency = qw/zsh git prove perltidy screenrc tmuxconf vimrc emacs/;
+    my @dependency = qw/bin zsh git prove perltidy screenrc tmuxconf vimrc emacs/;
     $self->$_ for @dependency;
 
     my $_install = sub {
-        my($self, $name) = @_;
+        my ($self, $name) = @_;
 
         # hooks
         if ($name eq '.vimrc') {
@@ -137,7 +141,7 @@ sub install {
         }
 
         move(catfile($HOME, $name), catfile($HOME, "${name}.bak")) if -e catfile($HOME, $name);
-        move($name, catfile($HOME, $name));
+        move(catfile($TEMP, $name), catfile($HOME, $name));
     };
 
     # zshrc
@@ -145,6 +149,7 @@ sub install {
 
     # git
     $self->$_install('.gitconfig');
+    $self->$_install('.git.template');
 
     # proverc
     $self->$_install('.proverc');
@@ -163,13 +168,16 @@ sub install {
 
     # emacs
     $self->$_install('.emacs.d');
+
+    # bin
+    $self->$_install('bin');
 }
 
 sub zsh {
     my $self = shift;
 
-    return if -f '.zshrc';
-    open my $fh, '>', '.zshrc' or die $!;
+    return if -f catfile($TEMP, '.zshrc');
+    open my $fh, '>', catfile($TEMP, '.zshrc') or die $!;
     print $fh "source $self->{zshrc_src}";
     close $fh;
 }
@@ -177,8 +185,8 @@ sub zsh {
 sub git {
     my $self = shift;
 
-    return if -s '.gitconfig';
-    symlink $self->{gitconfig_src}, '.gitconfig';
+    symlink $self->{gitconfig_src},    catfile($TEMP, '.gitconfig')    unless -f catfile($TEMP, '.gitconfig');
+    symlink $self->{git_template_dir}, catfile($TEMP, '.git.template') unless -f catfile($TEMP, '.git.template');
 }
 
 sub perl {
@@ -192,50 +200,51 @@ sub perl {
 sub prove {
     my $self = shift;
 
-    return if -s '.proverc';
-    symlink $self->{proverc_src}, '.proverc';
+    symlink $self->{proverc_src}, catfile($TEMP, '.proverc') unless -f catfile($TEMP, '.proverc');
 }
 
 sub perltidy {
     my $self = shift;
 
-    return if -s '.perltidyrc';
-    symlink $self->{perltidyrc_src}, '.perltidyrc';
+    symlink $self->{perltidyrc_src}, catfile($TEMP, '.perltidyrc') unless -f catfile($TEMP, '.perltidyrc');
 }
 
 sub tmuxconf {
     my $self = shift;
 
-    return if -s '.tmux.conf';
-    symlink $self->{tmuxconf_src}, '.tmux.conf';
+    symlink $self->{tmuxconf_src}, catfile($TEMP, '.tmux.conf') unless -f catfile($TEMP, '.tmux.conf');
 }
 
 sub screenrc {
     my $self = shift;
 
-    return if -s '.screenrc';
-    symlink $self->{screenrc_src}, '.screenrc';
+    symlink $self->{screenrc_src}, catfile($TEMP, '.screenrc') unless -f catfile($TEMP, '.screenrc');
 }
 
 sub vimrc {
     my $self = shift;
 
-    return if -s '.vimrc';
-    symlink $self->{vimrc_src}, '.vimrc';
+    symlink $self->{vimrc_src}, catfile($TEMP, '.vimrc') unless -f catfile($TEMP, '.vimrc');
 }
 
 sub emacs {
     my $self = shift;
 
-    return if -s '.emacs.d';
-    system('git', 'submodule', 'init');
-    system('git', 'submodule', 'update');
-    symlink $self->{emacsd_src}, '.emacs.d';
+    return if -f catfile($TEMP, '.emacs.d');
+    system 'git', 'submodule', 'init';
+    system 'git', 'submodule', 'update';
+    symlink $self->{emacsd_src}, catfile($TEMP, '.emacs.d');
+}
+
+sub bin {
+    my $self = shift;
+
+    symlink $self->{bin_dir}, catfile($TEMP, 'bin') unless -f catfile($TEMP, 'bin');
 }
 
 sub clean {
     my $self = shift;
-    system('rm', '-rf', qw/.zshrc .gitconfig .proverc .perltidyrc .screenrc .tmux.conf .vimrc .emacs.d/);
+    system 'rm', '-rf', $TEMP;
 }
 
 package main;

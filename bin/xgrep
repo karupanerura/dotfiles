@@ -1,0 +1,135 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use utf8;
+use feature 'say';
+
+use HTML::TreeBuilder::XPath;
+use File::Slurp qw/read_file read_dir/;
+use File::Spec::Functions qw/catfile/;
+use Getopt::Long ();
+use Pod::Usage;
+use Try::Tiny;
+
+my %OPTS;
+main(@ARGV);
+exit;
+
+sub getopt_spec {
+    return (
+        'verbose',
+        'help',
+        'recursive|r'
+    );
+}
+
+sub main {
+    local @ARGV = @_;
+
+    my %opts;
+    my $success = Getopt::Long::Parser->new(
+        config => [qw(
+            no_ignore_case
+            bundling
+            no_auto_abbrev
+        )],
+    )->getoptions(\%opts => getopt_spec());
+
+    if (not $success or $opts{help}) {
+        pod2usage($success ? 0 : 1);
+    }
+
+    run(\%opts, @ARGV);
+}
+
+sub run {
+    my ($opts, $xpath, @files) = @_;
+    push @files => \*STDIN unless @files;
+
+    my $to_key   = sub { ref($_) eq 'GLOB' ? fh2path($_) : $_ };
+    my %file_map = map {
+        $to_key->($_) => scalar read_file($_, binmode => ':raw')
+    } map {
+        (not(ref $_) and $opts->{recursive} and -d $_) ? read_dir_recursive($_) : $_;
+    } @files;
+
+    for my $filepath (keys %file_map) {
+        my $text = $file_map{$filepath};
+
+        try {
+            my $tree = HTML::TreeBuilder::XPath->new;
+            $tree->parse($text);
+            $tree->eof;
+
+            my @nodes = $tree->findnodes($xpath);
+            say "$filepath: ", $_ for dump_nodes(@nodes);
+
+            $tree->delete;
+        }
+        catch {
+            warn "skip: $filepath";
+            warn $_ if $opts->{verbose};
+        };
+    }
+}
+
+sub read_dir_recursive {
+    my $dir = shift;
+
+    my @matches = map  { catfile $dir, $_ } read_dir($dir);
+    my @files   = grep { -f $_ } @matches;
+    my @dirs    = grep { -d $_ } @matches;
+
+    return (@files, map { read_dir_recursive($_) } @dirs);
+}
+
+sub fh2path {
+    my $fh = shift;
+    return readlink sprintf('/proc/%d/fd/%d', $$, fileno($fh));
+}
+
+sub dump_nodes {
+    my @text;
+    for my $node (@_) {
+        push @text => dump_node($node);
+    }
+    return @text;
+}
+
+sub dump_node {
+    my $node = shift;
+    if ($node->isa('HTML::Element')) {
+        return split /[\r\n]+/, $node->as_HTML();
+    }
+    elsif ($node->isa('HTML::TreeBuilder::XPath::Node')) {
+        # ???: return split /[\r\n]+/, map { $_->as_HTML() } $node->getChildNodes();
+        die "HTML::TreeBuilder::XPath::Node is not supported. TODO.";
+    }
+    else {
+        die "unknown node: @{[ ref $node || $node ]}";
+    }
+}
+
+__END__
+
+=head1 NAME
+
+xgrep - grep with xpath
+
+=head1 SYNOPSIS
+
+xgrep '//a[href="/"]' **/*.xml
+
+ Options:
+   --help        brief help message
+   --verbose     verbose output
+
+=head1 DESCRIPTION
+
+xpathでxml/htmlを絞り込む君。夜食のお供に。
+
+=cut
+
+
+
+

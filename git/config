@@ -23,6 +23,8 @@
     added = yellow
     changed = green
     untracked = cyan
+[init]
+    templatedir = ~/.git.template
 [branch]
     autosetupmerge = false
     autosetuprebase = always

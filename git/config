@@ -50,6 +50,7 @@
     ck-commit     = "!f() { COMMIT=$1; test -z $COMMIT && COMMIT='HEAD'; TEMPDIR=$(printf '/tmp/%d' $$); mkdir -p $TEMPDIR; CHANGED_FILES=`git show $COMMIT | fgrep '+++ b/' | grep -E  '.(p([lm]|sgi)|t)$' | cut -d' ' -f 2 | cut -d/ -f 2-`; echo $CHANGED_FILES | xargs -I% -n1 -P0 sh -c 'mkdir -p `dirname ${1}/%`; git show ${2}:% > ${1}/%' -- $TEMPDIR $COMMIT; find $TEMPDIR -type f | xargs -n1 -P0 perl -wc; rm -rf $TEMPDIR; }; f $@"
     fetch-pulls   = fetch origin +refs/pull/*:refs/remotes/pull/*
     fetch-all     = "!find ~/project -maxdepth 3 -name .git -type d | xargs -P3 -n1 -I% git --git-dir=% fetch"
+    branch-name   = rev-parse --abbrev-ref HEAD
 [push]
     default = current
 [pull]

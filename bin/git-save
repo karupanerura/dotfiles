@@ -5,8 +5,12 @@ set -e
 IN_TREE=`git rev-parse --is-inside-work-tree`;
 if [ "$IN_TREE" = "true" ]; then
     GITROOT=`git rev-parse --show-toplevel`
+    BRANCH_NAME=`git branch-name`
     LOGFILE=$GITROOT/.git/info/.branch.log
-    git branch-name >> $LOGFILE
-    tail -n 100 $LOGFILE | uniq > $LOGFILE.tmp
-    mv $LOGFILE.tmp $LOGFILE
+    if [ -f $GITROOT/.git/refs/heads/$BRANCH_NAME ]; then
+        mkdir -p `dirname $LOGFILE`
+        echo $BRANCH_NAME >> $LOGFILE
+        tail -n 100 $LOGFILE | uniq > $LOGFILE.tmp
+        mv $LOGFILE.tmp $LOGFILE
+    fi
 fi

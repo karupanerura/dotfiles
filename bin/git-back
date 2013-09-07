@@ -5,10 +5,13 @@ set -e
 IN_TREE=`git rev-parse --is-inside-work-tree`;
 if [ "$IN_TREE" = "true" ]; then
     GITROOT=`git rev-parse --show-toplevel`
-    LOGFILE=$GITROOT/.git/info/.branch.log
-    if [ -f $LOGFILE ]; then
-        git checkout `tail -n2 $LOGFILE | head -n1`
-        head -n -2 $LOGFILE > $LOGFILE.tmp
-        mv $LOGFILE.tmp $LOGFILE
+    if [ -d $GITROOT ]; then
+        LOGFILE=$GITROOT/.git/info/.branch.log
+        test -d $GITROOT/.git/info || mkdir $GITROOT/.git/info
+        if [ -f $LOGFILE ]; then
+            git checkout `tail -n2 $LOGFILE | head -n1`
+            head -n -2 $LOGFILE > $LOGFILE.tmp
+            mv $LOGFILE.tmp $LOGFILE
+        fi
     fi
 fi

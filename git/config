@@ -51,6 +51,7 @@
     fetch-pulls   = fetch origin +refs/pull/*:refs/remotes/pull/*
     fetch-all     = "!find ~/project -maxdepth 3 -name .git -type d | xargs -P3 -n1 -I% git --git-dir=% fetch"
     branch-name   = rev-parse --abbrev-ref HEAD
+    bk            = back
 [push]
     default = current
 [pull]

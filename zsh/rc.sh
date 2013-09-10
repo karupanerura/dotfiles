@@ -1,4 +1,4 @@
-if [ -e $0 ]; then
+if [[ -e $0 ]]; then
     SELF_PATH=$0
 else
     SELF_PATH=$(stat -f '%Y' $0);
@@ -14,7 +14,7 @@ source $ZSHRC_BASEDIR/src/completion.sh
 source $ZSHRC_BASEDIR/src/prompt.sh
 source $ZSHRC_BASEDIR/src/misc.sh
 
-if [ -f ~/.zshrc.local ]; then
+if [[ -f ~/.zshrc.local ]]; then
     source ~/.zshrc.local
 fi
 

@@ -118,3 +118,8 @@ export VISUAL="emacsclient -nw"
 if ! type emacs > /dev/null 2>&1; then
     alias emacs="vim"
 fi
+
+if type colordiff > /dev/null 2>&1; then
+    ## colordiffを優先する。
+    alias diff="colordiff"
+fi

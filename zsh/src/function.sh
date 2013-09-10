@@ -9,6 +9,13 @@ function runcpp {
     rm -f $bin
 }
 
+function rungcc {
+    local bin=`tempfile`
+    gcc -O2 $1 -o $bin; shift
+    $bin $*
+    rm -f $bin
+}
+
 function plenv_perl_version {
     local dir=$PWD
 

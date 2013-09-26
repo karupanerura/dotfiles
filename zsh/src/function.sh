@@ -16,7 +16,7 @@ function rungcc {
     rm -f $bin
 }
 
-function plenv_perl_version {
+function plenv-perl-version {
     local dir=$PWD
 
     [[ -n $PLENV_VERSION ]] && { echo $PLENV_VERSION; return }
@@ -37,7 +37,7 @@ function plenv_perl_version {
     fi
 }
 
-function emacs_server_start {
+function emacs-server-start {
     if ps x | grep emacs | grep '\--daemon' > /dev/null 2>&1; then
         echo "[INFO] lived 'emacs --daemon'"
     else
@@ -46,7 +46,7 @@ function emacs_server_start {
     fi
 }
 
-function emacs_server_stop {
+function emacs-server-stop {
     if ps x | grep emacs | grep '\--daemon' > /dev/null 2>&1; then
         echo "[INFO] stop  'emacs --daemon'"
         emacsclient -e '(server-force-delete)'
@@ -56,7 +56,7 @@ function emacs_server_stop {
     fi
 }
 
-function emacs_server_restart {
-    emacs_server_stop;
-    emacs_server_start;
+function emacs-server-restart {
+    emacs-server-stop;
+    emacs-server-start;
 }

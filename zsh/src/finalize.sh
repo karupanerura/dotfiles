@@ -1,2 +1,2 @@
 ## emacs-server
-emacs_server_start
+emacs-server-start

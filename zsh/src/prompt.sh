@@ -14,7 +14,7 @@ function _update_prompt {
 }
 
 function _update_rprompt {
-    RPROMPT="%{$fg[blue]%}%{%}%n@%m%{${reset_color}%} [%{$fg[green]%}perl:$( plenv_perl_version )%{${reset_color}%}] $( git_prompt )";
+    RPROMPT="%{$fg[blue]%}%{%}%n@%m%{${reset_color}%} [%{$fg[green]%}perl:$( plenv-perl-version )%{${reset_color}%}] $( git_prompt )";
 }
 
 function _set_env_git_current_branch {

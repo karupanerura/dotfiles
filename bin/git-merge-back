@@ -1,0 +1,31 @@
+#!/bin/sh
+set -e
+# set -x
+
+IN_TREE=`git rev-parse --is-inside-work-tree`;
+if [ "$IN_TREE" = "true" ]; then
+    GITROOT=`git rev-parse --show-toplevel`
+    if [ -d $GITROOT ]; then
+        LOGFILE=$GITROOT/.git/info/.branch.log
+        test -d $GITROOT/.git/info || mkdir $GITROOT/.git/info
+        if [ -f $LOGFILE ]; then
+            BRANCH_NAME=`tail -n2 $LOGFILE | head -n1`
+            CURRENT_BRANCH_NAME=`cat $GITROOT/.git/HEAD | cut -d/ -f 3-`
+            echo "Merge branch '$BRANCH_NAME' into $CURRENT_BRANCH_NAME";
+            while true; do
+                echo -n "ok? (y/n)> "
+                read ANS
+                case $ANS in
+                    [Yy]|[Yy][Ee][Ss])
+                        break ;;
+                    [Nn]|[Nn][Oo])
+                        exit ;;
+                    *)
+                        continue ;;
+                esac
+            done
+            git merge $BRANCH_NAME
+        fi
+    fi
+fi
+

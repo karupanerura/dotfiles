@@ -18,6 +18,17 @@ case $( $DOTFILES_EXTLIB/bin/ostype ) in
         ;;
 esac
 
+# minicpan
+if type minicpan > /dev/null 2>&1; then
+    alias minicpan-update="minicpan -l ~/.minicpan -r http://ftp.nara.wide.ad.jp/pub/CPAN/"
+    export PERL_CPANM_OPT="$PERL_CPANM_OPT --mirror file://$HOME/.minicpan"
+fi
+
+# cpanm
+if type cpanm > /dev/null 2>&1; then
+    export PERL_CPANM_OPT="--prompt $PERL_CPANM_OPT --mirror http://ftp.ring.gr.jp/pub/lang/perl/CPAN/ --mirror http://ftp.nara.wide.ad.jp/pub/CPAN/"
+fi
+
 ## その他alias
 alias tmux="tmux -2 -L karupas_dev"
 alias emacs="emacsclient -nw"

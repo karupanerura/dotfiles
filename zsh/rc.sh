@@ -9,13 +9,12 @@ DOTFILES_EXTLIB=$DOTFILES_BASEDIR/extlib;
 
 source $ZSHRC_BASEDIR/src/common.sh
 source $ZSHRC_BASEDIR/src/function.sh
-source $ZSHRC_BASEDIR/src/alias.sh
 source $ZSHRC_BASEDIR/src/completion.sh
 source $ZSHRC_BASEDIR/src/prompt.sh
-source $ZSHRC_BASEDIR/src/misc.sh
 
 if [[ -f ~/.zshrc.local ]]; then
     source ~/.zshrc.local
 fi
 
+source $ZSHRC_BASEDIR/src/alias.sh
 source $ZSHRC_BASEDIR/src/finalize.sh

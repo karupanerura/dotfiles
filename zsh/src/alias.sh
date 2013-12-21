@@ -18,15 +18,15 @@ case $( $DOTFILES_EXTLIB/bin/ostype ) in
         ;;
 esac
 
+# cpanm
+if type cpanm > /dev/null 2>&1; then
+    export PERL_CPANM_OPT="--prompt --mirror http://ftp.ring.gr.jp/pub/lang/perl/CPAN/ --mirror http://ftp.nara.wide.ad.jp/pub/CPAN/ $PERL_CPANM_OPT"
+fi
+
 # minicpan
 if type minicpan > /dev/null 2>&1; then
     alias minicpan-update="minicpan -l ~/.minicpan -r http://ftp.nara.wide.ad.jp/pub/CPAN/"
-    export PERL_CPANM_OPT="$PERL_CPANM_OPT --mirror file://$HOME/.minicpan"
-fi
-
-# cpanm
-if type cpanm > /dev/null 2>&1; then
-    export PERL_CPANM_OPT="--prompt $PERL_CPANM_OPT --mirror http://ftp.ring.gr.jp/pub/lang/perl/CPAN/ --mirror http://ftp.nara.wide.ad.jp/pub/CPAN/"
+    export PERL_CPANM_OPT="--mirror file://$HOME/.minicpan $PERL_CPANM_OPT"
 fi
 
 ## その他alias

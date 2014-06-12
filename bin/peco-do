@@ -1,0 +1,4 @@
+#!/usr/bin/env zsh
+CMD=`perl -E 'say for @ARGV' $commands | xargs basename | peco`
+vared -p "> $CMD " -c ARGS
+exec $CMD $ARGS

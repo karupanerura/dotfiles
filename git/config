@@ -54,6 +54,7 @@
     new-branch    = "!f() { BRANCH_NAME=$1; git fetch && git co -b $BRANCH_NAME origin/master && git push -u origin $BRANCH_NAME; }; f"
     bk            = back
     hist          = history
+    log-ticket-id = "!f() { git log --format=%s \"$@\" | perl -ne 'print if /refs #([0-9]+)/ && $tid != $1 and $tid = $1' | head -n10 ; }; f \"$@\""
 [push]
     default = current
 [pull]

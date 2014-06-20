@@ -55,7 +55,6 @@
     bk               = back
     hist             = history
     log-ticket-id    = "!f() { git log --format=%s \"$@\" | perl -ne 'print if /refs #([0-9]+)/ && $tid != $1 and $tid = $1' | head -n10 ; }; f \"$@\""
-    clone-with-cache = "!f() { REPO=$1; shift; CACHE=\"/tmp/git-repo-cache/$REPO\"; [[ -d $CACHE ]] || git clone --mirror $REPO $CACHE; git --git-dir=$CACHE fetch; git clone $CACHE $@; }; f"
 [push]
     default = current
 [pull]

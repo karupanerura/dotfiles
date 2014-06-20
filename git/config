@@ -34,27 +34,28 @@
     stat = true
     ff   = false
 [alias]
-    st            = status
-    ci            = commit
-    br            = branch
-    co            = checkout
-    df            = diff
-    dw            = diff -w --word-diff
-    lg            = log -p
-    url           = config --get remote.origin.url
-    tree          = log --graph --pretty='format:%C(yellow)%h%Creset %s %Cgreen(%an)%Creset %Cred%d%Creset'
-    wt            = whatchanged --stat
-    edit-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; emacs `f`"
-    add-unmerged  = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`"
-    ck            = "!git --no-pager diff --diff-filter=ACMRX --name-only --no-color HEAD | egrep '\\.(t|p([lm]|sgi))$' | xargs -n 1 -P2 perl -wc"
-    fetch-pulls   = fetch origin +refs/pull/*:refs/remotes/pull/*
-    fetch-all     = "!find ~/project -maxdepth 3 -name .git -type d | xargs -P3 -n1 -I% git --git-dir=% fetch"
-    branch-name   = rev-parse --abbrev-ref HEAD
-    cv            = "!f() { git cherry \"$@\" | perl -ane 'print $F[0], \" \", `git --no-pager show --date=short --no-notes --pretty=\"%h %Cgreen%cd %Cblue%cn%x09%Creset%s\" -s $F[1]`' ; }; f"
-    new-branch    = "!f() { BRANCH_NAME=$1; git fetch && git co -b $BRANCH_NAME origin/master && git push -u origin $BRANCH_NAME; }; f"
-    bk            = back
-    hist          = history
-    log-ticket-id = "!f() { git log --format=%s \"$@\" | perl -ne 'print if /refs #([0-9]+)/ && $tid != $1 and $tid = $1' | head -n10 ; }; f \"$@\""
+    st               = status
+    ci               = commit
+    br               = branch
+    co               = checkout
+    df               = diff
+    dw               = diff -w --word-diff
+    lg               = log -p
+    url              = config --get remote.origin.url
+    tree             = log --graph --pretty='format:%C(yellow)%h%Creset %s %Cgreen(%an)%Creset %Cred%d%Creset'
+    wt               = whatchanged --stat
+    edit-unmerged    = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; emacs `f`"
+    add-unmerged     = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`"
+    ck               = "!git --no-pager diff --diff-filter=ACMRX --name-only --no-color HEAD | egrep '\\.(t|p([lm]|sgi))$' | xargs -n 1 -P2 perl -wc"
+    fetch-pulls      = fetch origin +refs/pull/*:refs/remotes/pull/*
+    fetch-all        = "!find ~/project -maxdepth 3 -name .git -type d | xargs -P3 -n1 -I% git --git-dir=% fetch"
+    branch-name      = rev-parse --abbrev-ref HEAD
+    cv               = "!f() { git cherry \"$@\" | perl -ane 'print $F[0], \" \", `git --no-pager show --date=short --no-notes --pretty=\"%h %Cgreen%cd %Cblue%cn%x09%Creset%s\" -s $F[1]`' ; }; f"
+    new-branch       = "!f() { BRANCH_NAME=$1; git fetch && git co -b $BRANCH_NAME origin/master && git push -u origin $BRANCH_NAME; }; f"
+    bk               = back
+    hist             = history
+    log-ticket-id    = "!f() { git log --format=%s \"$@\" | perl -ne 'print if /refs #([0-9]+)/ && $tid != $1 and $tid = $1' | head -n10 ; }; f \"$@\""
+    clone-with-cache = "!f() { REPO=$1; shift; CACHE=\"/tmp/git-repo-cache/$REPO\"; [[ -d $CACHE ]] || git clone --mirror $REPO $CACHE; git --git-dir=$CACHE fetch; git clone $CACHE $@; }; f"
 [push]
     default = current
 [pull]

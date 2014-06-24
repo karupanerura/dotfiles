@@ -1,13 +1,24 @@
-#!/bin/sh
+#!/usr/bin/env zsh
 set -e
-set -x
+set -u
 
-cd $HOME/.anyenv
-git fetch --prune
-git pull
+function upgrade {
+    cd $1
+    echo "### upgrade $1 ..."
+    git fetch -qp
+    git pull -q
+    if [ -d plugins ]; then
+        echo "### upgrade plugins ..."
+        for plugin in plugins/*; do
+            upgrade $plugin &
+        done
+        wait
+    fi
+    cd -
+}
 
+upgrade $HOME/.anyenv
 for dir in `anyenv envs`; do
-    cd $HOME/.anyenv/envs/$dir/.git
-    git fetch --prune
-    git pull
+    upgrade $HOME/.anyenv/envs/$dir &
 done
+wait

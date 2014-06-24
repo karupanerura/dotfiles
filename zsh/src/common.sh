@@ -123,3 +123,16 @@ if type colordiff > /dev/null 2>&1; then
     ## colordiffを優先する。
     alias diff="colordiff"
 fi
+
+# cpanm
+if type cpanm > /dev/null 2>&1; then
+    export PERL_CPANM_OPT="--prompt --mirror http://ftp.ring.gr.jp/pub/lang/perl/CPAN/ --mirror http://cpan.metacpan.org/"
+fi
+
+# minicpan
+if type minicpan > /dev/null 2>&1; then
+    export PERL_CPANM_OPT="--mirror file://$HOME/.minicpan $PERL_CPANM_OPT"
+fi
+
+# golang
+export GOPATH=$HOME/.go

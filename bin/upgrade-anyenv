@@ -1,0 +1,13 @@
+#!/bin/sh
+set -e
+set -x
+
+cd $HOME/.anyenv
+git fetch --prune
+git pull
+
+for dir in `anyenv envs`; do
+    cd $HOME/.anyenv/envs/$dir/.git
+    git fetch --prune
+    git pull
+done

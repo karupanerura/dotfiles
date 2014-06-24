@@ -1,0 +1,21 @@
+#!/bin/sh
+set -e
+set -u
+
+if [ ! -d  ~/.anyenv ]; then
+    git clone https://github.com/riywo/anyenv ~/.anyenv
+    echo '# anyenv' >> ~/.zprofile
+    echo 'export PATH="$HOME/.anyenv/bin:$PATH"' >> ~/.zprofile
+    echo 'eval "$(anyenv init -)"' >> ~/.zprofile
+
+    export PATH="$HOME/.anyenv/bin:$PATH"
+    eval "$(anyenv init -)"
+fi
+
+for env in $@; do
+    if [ -d "$HOME/.anyenv/envs/$env" ]; then
+        echo "already installed: $env"
+    else
+        anyenv install $env
+    fi
+done

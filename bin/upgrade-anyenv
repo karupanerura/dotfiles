@@ -8,7 +8,6 @@ function upgrade {
     git fetch -qp
     git pull -q
     if [[ -d plugins ]]; then
-        echo "### upgrade plugins ..."
         for plugin in `find plugins -maxdepth 1 -type d`; do
             [[ $plugin != 'plugins' ]] && upgrade $plugin &
         done
@@ -18,7 +17,7 @@ function upgrade {
 }
 
 cd $HOME
-upgrade .anyenv
+upgrade .anyenv &
 
 cd .anyenv
 for dir in `anyenv envs`; do

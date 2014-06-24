@@ -17,8 +17,11 @@ function upgrade {
     cd -
 }
 
-upgrade $HOME/.anyenv
+cd $HOME
+upgrade .anyenv
+
+cd .anyenv
 for dir in `anyenv envs`; do
-    upgrade $HOME/.anyenv/envs/$dir &
+    upgrade envs/$dir &
 done
 wait

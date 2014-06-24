@@ -7,10 +7,10 @@ function upgrade {
     echo "### upgrade $1 ..."
     git fetch -qp
     git pull -q
-    if [ -d plugins ]; then
+    if [[ -d plugins ]]; then
         echo "### upgrade plugins ..."
-        for plugin in plugins/*; do
-            upgrade $plugin &
+        for plugin in `find plugins -maxdepth 1 -type d`; do
+            [[ $plugin != 'plugins' ]] && upgrade $plugin &
         done
         wait
     fi

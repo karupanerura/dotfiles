@@ -4,7 +4,7 @@ set -e
 
 URL=$1
 OUT=$2
-CACHE_DIR="/tmp/git-repo-cache/$URL"
+CACHE_DIR="/tmp/git-repo-cache/$( echo $URL | perl -pe 's{^(?:https?|git):}{}; tr{:}{/}; s{/+}{/}g' )"
 
 [[ -z "$OUT"     ]] && OUT=`basename $URL | sed -e 's/\.git$//'`
 [[ -d $CACHE_DIR ]] || git clone --bare $URL $CACHE_DIR

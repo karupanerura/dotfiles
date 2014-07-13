@@ -1,0 +1,9 @@
+#!/usr/bin/env zsh
+set -e
+set -u
+
+emacs=`where emacs | fgrep -v aliased | head -n2 | tail -1`
+
+[[ $# -eq 0        ]] && exec $emacs
+[[ $1 = '--daemon' ]] && exec $emacs --daemon
+exec emacsclient -nw "$@"

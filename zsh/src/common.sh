@@ -23,6 +23,7 @@ export SAVEHIST=10000
 typeset -U path
 path=(
     $HOME/bin
+    $HOME/local/bin
     $DOTFILES_EXTLIB/bin
     $path
 )
@@ -116,9 +117,9 @@ if type ggrep > /dev/null 2>&1; then
     alias grep=ggrep
 fi
 
-## emacsを使う。(emacsclient)
-export EDITOR="emacsclient -nw"
-export VISUAL="emacsclient -nw"
+## emacsを使う。(emacs)
+export EDITOR="emacs"
+export VISUAL="emacs"
 ## emacsがなくてもemacsでvimを起動する。
 if ! type emacs > /dev/null 2>&1; then
     alias emacs="vim"

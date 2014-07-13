@@ -20,7 +20,12 @@ export HISTSIZE=10000
 export SAVEHIST=10000
 
 # bin&extlib/binをPATHに追加
-export PATH="$HOME/bin:$DOTFILES_EXTLIB/bin:$PATH"
+typeset -U path
+path=(
+    $HOME/bin
+    $DOTFILES_EXTLIB/bin
+    $path
+)
 
 # 履歴ファイルに時刻を記録
 setopt extended_history
@@ -135,4 +140,12 @@ if type minicpan > /dev/null 2>&1; then
 fi
 
 # golang
-export GOPATH=$HOME/.go
+if type go > /dev/null 2>&1; then
+    export GOROOT=`go env GOROOT`
+    export GOPATH=$HOME/.go
+    path=(
+        $path
+        $GOROOT/bin
+        $GOPATH/bin
+    )
+fi

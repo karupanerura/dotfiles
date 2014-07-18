@@ -1,0 +1,28 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use feature qw/say/;
+
+use File::Find qw/find/;
+use File::Spec;
+
+my @inc = map { File::Spec->canonpath($_) } grep { -d && $_ ne '.' } @INC;
+my %inc = map { $_ => 1 } @inc;
+
+my %modules;
+for my $path (@inc) {
+    find +{
+        wanted => sub {
+            $File::Find::prune = 1 if -d && $inc{$_} && $_ ne $path;
+            return if -d;
+            return unless s/\.pm\z//;
+
+            $_ = File::Spec->abs2rel($_, $path);
+            my $module = join '::', File::Spec->splitdir($_);
+            say $module unless $modules{$module}++;
+        },
+        no_chdir    => 1,
+        follow      => 1,
+        follow_skip => 2,
+    } => $path;
+}

@@ -1,0 +1,8 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use utf8;
+use File::Temp qw/tempfile/;
+
+my (undef, $filename) = tempfile(CLEANUP => 0);
+print $filename, $/;

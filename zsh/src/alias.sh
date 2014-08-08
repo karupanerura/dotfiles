@@ -37,5 +37,5 @@ alias uri-escape="perl -MURI::Escape=uri_escape -pe '\$_ = uri_escape \$_'"
 alias uri-unescape="perl -MURI::Escape=uri_unescape -pe '\$_ = uri_unescape \$_'"
 alias whitespace-fix="perl -i -pe 's/\s+$/\n/'"
 alias perldoc-peco='perldoc `perl-module-list | peco`'
-alias cpandoc-peco='cpandoc `perl-module-list | peco`'
-alias cpanm-peco='cpanm `perl-module-list | peco`'
+alias cpandoc-peco='cpandoc `cpan-module-list | peco`'
+alias cpanm-peco='cpanm `cpan-module-list | peco`'

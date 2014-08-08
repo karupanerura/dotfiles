@@ -1,0 +1,6 @@
+#!/usr/bin/env zsh
+if [[ -f ~/.minicpan/modules/02packages.details.txt.gz ]]; then
+    gunzip -c ~/.minicpan/modules/02packages.details.txt.gz | tail -n +10 | awk '{print $3}' | cut -d/ -f4 | cut -d. -f1 | sed -re 's/-v?[0-9]$//;s/-/::/g' | sort | uniq
+else
+    echo 'this script required CPAN::Mini.' > /dev/stderr
+fi

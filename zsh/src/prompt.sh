@@ -63,10 +63,10 @@ function git_status {
     GIT_STATUS_UNMERGED=0
     GIT_STATUS_UNTRACKED=0
     GIT_STATUS_UNKNOWN=0
-    for ST in $(git status --porcelain 2> /dev/null | cut -b -2 | sed -e 's/\s/S/' | sort | uniq); do
+    for ST in $(git status --porcelain 2> /dev/null | cut -b -2 | tr ' ' S | uniq); do
         case $ST in
             '??')
-                GIT_STATUS_UNTRACKED=1                
+                GIT_STATUS_UNTRACKED=1
                 ;;
             AS|MS)
                 GIT_STATUS_ADDED=1
@@ -78,7 +78,7 @@ function git_status {
                 GIT_STATUS_RENAMED=1
                 ;;
             AD|SD)
-                GIT_STATUS_DELETED=1        
+                GIT_STATUS_DELETED=1
                 ;;
             UU)
                 GIT_STATUS_UNMERGED=1

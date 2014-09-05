@@ -40,7 +40,9 @@
     br                  = branch
     co                  = checkout
     df                  = diff
+    dfc                 = diff --cached
     dw                  = diff -w --word-diff
+    dwc                 = diff -w --word-diff --cached
     lg                  = log -p
     url                 = config --get remote.origin.url
     tree                = log --graph --pretty='format:%C(yellow)%h%Creset %s %Cgreen(%an)%Creset %Cred%d%Creset'

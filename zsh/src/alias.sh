@@ -26,6 +26,7 @@ fi
 ## その他alias
 alias tmux="tmux -2 -L karupas_dev"
 alias scp="scp -C"
+alias gi="git"
 alias random-string='perl -MString::Random=random_string -E "say+random_string(q{s} x (\$ARGV[0] || 10))"'
 alias webalize='perl -MTest::TCP -E "exec(qq{plackup -p=@{[ empty_port() ]} -MPlack::App::Directory -e \"Plack::App::Directory->new(root => q{.})->to_app\"})"'
 alias sync='sync && sync && sync'

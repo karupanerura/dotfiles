@@ -29,10 +29,10 @@ alias scp="scp -C"
 alias gi="git"
 alias random-string='perl -MString::Random=random_string -E "say+random_string(q{s} x (\$ARGV[0] || 10))"'
 alias webalize='perl -MTest::TCP -E "exec(qq{plackup -p=@{[ empty_port() ]} -MPlack::App::Directory -e \"Plack::App::Directory->new(root => q{.})->to_app\"})"'
-alias sync='sync && sync && sync'
-alias shutdown='sync && shutdown'
-alias reboot='sync && reboot'
-alias halt='sync && halt'
+alias sync='sudo -H sync && sudo -H sync && sudo -H sync'
+alias shutdown='sudo -H sync && sudo -H shutdown'
+alias reboot='sudo -H sync && sudo -H reboot'
+alias halt='sudo -H sync && sudo -H halt'
 alias rot13='tr a-mn-zA-MN-Z0-45-9 n-za-mA-MN-Z5-90-4'
 alias uri-escape="perl -MURI::Escape=uri_escape -pe '\$_ = uri_escape \$_'"
 alias uri-unescape="perl -MURI::Escape=uri_unescape -pe '\$_ = uri_unescape \$_'"

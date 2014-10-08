@@ -40,3 +40,4 @@ alias whitespace-fix="perl -i -pe 's/\s+$/\n/'"
 alias perldoc-peco='perldoc `perl-module-list | peco`'
 alias cpandoc-peco='cpandoc `cpan-module-list | peco`'
 alias cpanm-peco='cpanm `cpan-module-list | peco`'
+alias sumup='perl -nE '"'"'$c+=$_}{say$c'"'"''

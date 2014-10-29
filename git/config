@@ -41,6 +41,7 @@
     ci                  = commit
     br                  = branch
     co                  = checkout
+    co-hist-peco        = "!git checkout `git history -n50 | sort | uniq -c | sort -nr | awk '{print $2}' | peco`"
     df                  = diff
     dfc                 = diff --cached
     dw                  = diff -w --word-diff

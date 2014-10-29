@@ -1,0 +1,22 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use utf8;
+use feature qw/say/;
+
+use Getopt::Long ':config' => qw/posix_default no_ignore_case bundling auto_help/;
+use Test::TCP qw/empty_port/;
+use Plack::Loader;
+use Plack::App::Directory;
+use Cwd qw/realpath/;
+
+GetOptions(
+    'p|port=i' => \my $port,
+) or exit 1;
+$port = empty_port() unless $port;
+
+my $root = realpath(shift @ARGV || '.');
+say "HTTP::Server::PSGI: Accepting connections at http://0.0.0.0:$port/";
+say "mount: $root";
+my $app  = Plack::App::Directory->new(root => $root)->to_app;
+Plack::Loader->auto(port => $port)->run($app);

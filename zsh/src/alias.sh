@@ -27,8 +27,8 @@ fi
 alias tmux="tmux -2 -L karupas_dev"
 alias scp="scp -C"
 alias gi="git"
-alias random-string='perl -MString::Random=random_string -E "say+random_string(q{s} x (\$ARGV[0] || 10))"'
-alias webalize='perl -MTest::TCP -E "exec(qq{plackup -p=@{[ empty_port() ]} -MPlack::App::Directory -e \"Plack::App::Directory->new(root => q{.})->to_app\"})"'
+alias sudo="sudo -H"
+alias random-string='perl -MString::Random=random_string -E '"'"'say+random_string(q{s}x($ARGV[0]||10))'"'"''
 alias sync='sudo -H sync && sudo -H sync && sudo -H sync'
 alias shutdown='sudo -H sync && sudo -H shutdown'
 alias reboot='sudo -H sync && sudo -H reboot'

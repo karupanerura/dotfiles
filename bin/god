@@ -1,0 +1,8 @@
+#!/bin/sh
+echo "I am god."
+if [ "$1" = "status" ]; then
+    echo "I'm as good as pie."
+    exit
+fi
+sleep 1
+exec git "$@"

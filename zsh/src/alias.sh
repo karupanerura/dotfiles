@@ -41,4 +41,6 @@ alias whitespace-fix="perl -i -pe 's/\s+$/\n/'"
 alias perldoc-peco='perldoc `perl-module-list | peco`'
 alias cpandoc-peco='cpandoc `cpan-module-list | peco`'
 alias cpanm-peco='cpanm `cpan-module-list | peco`'
+alias edit-peco='emacs `if [ -d .git ]; then; git ls-files | peco; else; find . -type f | peco; fi`'
+alias project-peco='cd ~/project/`\ls ~/project | peco` && edit-peco'
 alias sumup='perl -nE '"'"'$c+=$_}{say$c'"'"''

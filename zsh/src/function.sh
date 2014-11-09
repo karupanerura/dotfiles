@@ -62,6 +62,16 @@ function emacs-server-stop {
     fi
 }
 
+function seminar-mode {
+    export PROMPT="${PROMPT:s/%%/
+%%}"
+}
+
+function normal-mode {
+    export PROMPT="${PROMPT:s/
+%%/%%}"
+}
+
 function emacs-server-restart {
     emacs-server-stop;
     emacs-server-start;

@@ -62,6 +62,7 @@
     hist                = history
     log-ticket-id       = "!f() { git log --format=%s \"$@\" | perl -ne 'print if /refs #([0-9]+)/ && $tid != $1 and $tid = $1' | head -n10 ; }; f \"$@\""
     rollback-typechange = "!git diff --name-only --diff-filter=T \"$@\" | xargs git co --"
+    force-unlock        = "!git rev-parse --is-inside-work-tree > /dev/null && rm -i `git rev-parse --show-toplevel`/.git/index.lock"
 [push]
     default = current
 [pull]

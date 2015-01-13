@@ -1,0 +1,8 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use utf8;
+use open ':std', ':encoding(utf-8)';
+use Lingua::JA::Regular::Unicode qw/alnum_z2h space_z2h katakana_z2h/;
+$|=1;
+print+alnum_z2h+space_z2h+katakana_z2h($_) while <>;

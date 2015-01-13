@@ -1,0 +1,3 @@
+#!/bin/sh
+cd `emacsclient -e '(cond ((projectile-project-p) (projectile-project-root)) (t "."))' | sed -e 's/^"//; s!/*"$!!'`
+exec "$@"

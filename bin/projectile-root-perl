@@ -1,0 +1,2 @@
+#!/bin/sh
+exec projectile-root-exec perl -I$PWD -I$PWD/lib -I$PWD/site_perl -Mblib -Mlib=$PWD/local/lib/perl5 "$@"

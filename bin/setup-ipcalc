@@ -1,0 +1,6 @@
+#!/bin/sh
+set -e
+set -u
+
+VERSION=0.41
+curl -fsSL -o $HOME/local/bin/ipcalc http://jodies.de/ipcalc-archive/ipcalc-$VERSION/ipcalc

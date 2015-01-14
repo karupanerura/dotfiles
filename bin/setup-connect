@@ -1,0 +1,13 @@
+#!/usr/bin/env zsh
+set -ue
+tempdir=`tempfile`
+rm $tempdir
+mkdir $tempdir
+cd $tempdir
+
+wget -q ftp://ftp.st.ryukoku.ac.jp/pub/security/tool/openssh-supports/connect.c
+mkdir -p ~/local/bin
+clang connect.c -o $HOME/local/bin/connect -lresolv -O2
+
+cd -
+rm $tempdir

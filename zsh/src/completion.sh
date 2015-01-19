@@ -34,6 +34,9 @@ setopt no_beep
 # sudo でも補完の対象
 zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin /usr/sbin /usr/bin /sbin /bin
 
+# 大文字小文字を区別せずに補完する
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+
 # 補完候補が複数ある時に、一覧表示
 setopt auto_list
 

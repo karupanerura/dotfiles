@@ -16,6 +16,7 @@ GetOptions(
 $port = empty_port() unless $port;
 
 my $root = realpath(shift @ARGV || '.');
+system 'open', "http://0.0.0.0:$port/" if $^O eq 'darwin';
 say "HTTP::Server::PSGI: Accepting connections at http://0.0.0.0:$port/";
 say "mount: $root";
 my $app  = Plack::App::Directory->new(root => $root)->to_app;

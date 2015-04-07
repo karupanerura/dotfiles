@@ -35,6 +35,9 @@
 [merge]
     stat = true
     ff   = false
+[merge "mergepbx"]
+    name = XCode project files merger
+    driver = ~/local/bin/mergepbx %O %A %B
 [alias]
     list-alias          = "!git config --list | perl -F\\\\. -ane 'printf \"%-20s%s\", split \"=\", join(\".\", @F[1..@F-1]), 2 if $F[0] eq \"alias\"'"
     st                  = status

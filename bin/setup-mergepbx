@@ -1,0 +1,20 @@
+#!/bin/sh
+set -e
+set -u
+
+PYENV_VERSION=2.7.9
+pyenv version
+
+if [ ! -d  ~/.mergepbx ]; then
+    git clone https://github.com/simonwagner/mergepbx ~/.mergepbx
+    cd ~/.mergepbx
+else
+    cd ~/.mergepbx
+    git reset --hard
+    git clean -dxf
+    git pull
+fi
+
+./build.py
+chmod +x mergepbx
+cp mergepbx $HOME/local/bin

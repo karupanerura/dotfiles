@@ -10,6 +10,7 @@ case $( $DOTFILES_EXTLIB/bin/ostype ) in
         alias ls="ls -G"
         alias la="ls -Ga"
         alias ll="ls -GlA"
+        alias watch=-watch-simple
         ;;
     *)
         alias ls="ls -hbF --color=auto"

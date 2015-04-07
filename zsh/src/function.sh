@@ -22,6 +22,16 @@ function runjava {
     java `echo $JAVA_SRC | sed -e 's/\.java$//'` $*
 }
 
+
+function -watch-simple {
+    while true; do
+        clear
+        echo "watch: $*"
+        $SHELL -c "$*" | head -n `expr $(tput lines) - 2`
+        sleep 2
+    done
+}
+
 function plenv-perl-version {
     local dir=$PWD
 

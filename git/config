@@ -4,7 +4,7 @@
     editor = emacsclient -nw
     pager  = lv
     whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
-    excludesfile = .gitignore
+    excludesfile = ~/.gitignore
 [color]
     ui = always
     branch = auto

@@ -135,6 +135,7 @@ sub install {
 
         # hooks
         if ($name eq '.vimrc') {
+            mkpath(catfile($HOME, '.vim', 'bundle'))        unless -d catfile($HOME, '.vim', 'bundle');
             mkpath(catfile($HOME, '.vim', 'tmp', 'swap'))   unless -d catfile($HOME, '.vim', 'tmp', 'swap');
             mkpath(catfile($HOME, '.vim', 'tmp', 'backup')) unless -d catfile($HOME, '.vim', 'tmp', 'backup');
             mkpath(catfile($HOME, '.vim', 'tmp', 'undo'))   unless -d catfile($HOME, '.vim', 'tmp', 'undo');
@@ -225,6 +226,7 @@ sub vimrc {
     my $self = shift;
 
     symlink $self->{vimrc_src}, catfile($TEMP, '.vimrc') unless -f catfile($TEMP, '.vimrc');
+    system 'git', 'clone', 'git://github.com/Shougo/neobundle.vim', catfile($HOME, '.vim', 'bundle', 'neobundle.vim');
 }
 
 sub emacs {

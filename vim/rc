@@ -78,3 +78,27 @@ au BufRead,BufNew * match JpSpace \　 \
 " ウィンドウ分割で上や左にではなく右や下に開くように
 set splitright
 set splitbelow
+
+" NeoBundle
+
+" Note: Skip initialization for vim-tiny or vim-small.
+if 0 | endif
+
+if has('vim_starting')
+  if &compatible
+    set nocompatible               " Be iMproved
+  endif
+
+  " Required:
+  set runtimepath+=~/.vim/bundle/neobundle.vim/
+endif
+
+" Required:
+call neobundle#begin(expand('~/.vim/bundle/'))
+
+NeoBundleFetch 'Shougo/neobundle.vim'
+NeoBundle 'rhysd/vim-crystal'
+
+call neobundle#end()
+filetype plugin indent on
+NeoBundleCheck

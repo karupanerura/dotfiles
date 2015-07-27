@@ -44,6 +44,7 @@
     ci                  = commit
     br                  = branch
     co                  = checkout
+    clean-untracked     = "!git ls-files --others --exclude-standard | xargs rm"
     co-hist-peco        = "!git checkout `git history -n50 | sort | uniq -c | sort -nr | awk '{print $2}' | peco`"
     df                  = diff
     dfc                 = diff --cached

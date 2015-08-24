@@ -1,6 +1,5 @@
 # 文字コードの設定
 export LANG=ja_JP.UTF-8
-export JLESSCHARSET=japanese
 export LC_CTYPE="ja_JP.UTF-8"
 export LC_NUMERIC="ja_JP.UTF-8"
 export LC_TIME="ja_JP.UTF-8"

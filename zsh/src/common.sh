@@ -113,6 +113,11 @@ if type colordiff > /dev/null 2>&1; then
     alias diff="colordiff"
 fi
 
+# less
+if type less > /dev/null 2>&1; then
+    export LESSCHARSET=utf-8
+fi
+
 # cpanm
 if type cpanm > /dev/null 2>&1; then
     export PERL_CPANM_OPT="--prompt --mirror http://ftp.ring.gr.jp/pub/lang/perl/CPAN/ --mirror http://cpan.metacpan.org/"

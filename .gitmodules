@@ -1,3 +1,3 @@
 [submodule "emacs"]
 	path = emacs
-	url = git@github.com:karupanerura/.emacs.d.git
+	url = git://github.com/karupanerura/.emacs.d.git

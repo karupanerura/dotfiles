@@ -9,6 +9,8 @@ brew 'llvm'
 brew 'openssl'
 brew 'readline'
 brew 'gnu-units'
+brew 'hub'
+brew 'libyaml'
 
 brew 'caskroom/cask/brew-cask'
 brew 'Caskroom/cask/karabiner'

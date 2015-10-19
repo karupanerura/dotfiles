@@ -1,0 +1,20 @@
+tap 'peco/peco'
+
+brew 'emacs'
+brew 'vim'
+brew 'git'
+brew 'zsh'
+brew 'peco'
+brew 'llvm'
+brew 'openssl'
+brew 'readline'
+brew 'gnu-units'
+
+brew 'caskroom/cask/brew-cask'
+brew 'Caskroom/cask/karabiner'
+brew 'Caskroom/cask/google-japanese-ime'
+brew 'Caskroom/cask/dropbox'
+brew 'Caskroom/cask/google-chrome'
+brew 'Caskroom/cask/iterm2'
+brew 'Caskroom/cask/vagrant'
+

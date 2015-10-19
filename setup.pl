@@ -120,6 +120,7 @@ sub build {
 
     # dependency
     my @dependency = qw/bin zsh git prove perltidy screenrc tmuxconf vimrc emacs/;
+    push @dependency => 'osx' if $^O eq 'darwin';
     $self->$_ for @dependency;
 }
 
@@ -181,6 +182,14 @@ sub zsh {
     open my $fh, '>', catfile($TEMP, '.zshrc') or die $!;
     print $fh "source $self->{zshrc_src}";
     close $fh;
+}
+
+sub osx {
+    system q{ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"};
+    system q{brew tap Homebrew/bundle};
+    system q{cd osx; brew bundle; cd ..};
+    system q{echo /usr/local/bin/zsh | sudo -H bash -c 'cat >> /etc/shells'};
+    system sudo => -H => chsh => -s => '/usr/local/bin/zsh', $ENV{USER};
 }
 
 sub git {

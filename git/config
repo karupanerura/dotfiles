@@ -2,7 +2,7 @@
     path = .gitconfig.local
 [core]
     editor = emacsclient -nw
-    pager  = lv
+    pager  = less
     whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
     excludesfile = ~/.gitignore
 [color]
@@ -80,6 +80,6 @@
 [github]
     user = karupanerura
 [pager]
-    log  = diff-highlight | lv
-    show = diff-highlight | lv
-    diff = diff-highlight | lv
+    log  = diff-highlight | less
+    show = diff-highlight | less
+    diff = diff-highlight | less

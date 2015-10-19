@@ -19,4 +19,5 @@ brew 'Caskroom/cask/dropbox'
 brew 'Caskroom/cask/google-chrome'
 brew 'Caskroom/cask/iterm2'
 brew 'Caskroom/cask/vagrant'
-
+brew 'Caskroom/cask/slack'
+brew 'Caskroom/cask/limechat'

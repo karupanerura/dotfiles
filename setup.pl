@@ -190,6 +190,8 @@ sub osx {
     system q{cd osx; brew bundle; cd ..};
     system q{echo /usr/local/bin/zsh | sudo -H bash -c 'cat >> /etc/shells'};
     system sudo => -H => chsh => -s => '/usr/local/bin/zsh', $ENV{USER};
+    system q{cp -f /usr/local/share/fonts/Ricty*.ttf ~/Library/Fonts/};
+    system q{fc-cache -vf};
 }
 
 sub git {

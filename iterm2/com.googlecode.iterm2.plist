@@ -89,7 +89,7 @@
 	<key>NSColorPickerSlidersDefaults</key>
 	<string>3</string>
 	<key>NSNavLastRootDirectory</key>
-	<string>~/Documents</string>
+	<string>~/dotfiles/iterm2</string>
 	<key>NSNavPanelExpandedSizeForOpenMode</key>
 	<string>{712, 459}</string>
 	<key>NSQuotedKeystrokeBinding</key>
@@ -850,7 +850,7 @@
 					<key>parameter</key>
 					<integer>0</integer>
 					<key>regex</key>
-					<string>(warn|WARN)(ing|ING)?</string>
+					<string>(warn|WARN)(ings?|INGS?)?</string>
 				</dict>
 				<dict>
 					<key>action</key>
@@ -858,7 +858,7 @@
 					<key>parameter</key>
 					<integer>5</integer>
 					<key>regex</key>
-					<string>(crit|CRITICAL|ERROR)</string>
+					<string>(crit|CRITICAL|ERRORS?)</string>
 				</dict>
 			</array>
 			<key>Unlimited Scrollback</key>

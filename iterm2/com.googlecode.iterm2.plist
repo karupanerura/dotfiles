@@ -858,7 +858,7 @@
 					<key>parameter</key>
 					<integer>5</integer>
 					<key>regex</key>
-					<string>(crit|CRITICAL|ERRORS?)</string>
+					<string>(crit|critical|CRITICAL|ERRORS?)</string>
 				</dict>
 			</array>
 			<key>Unlimited Scrollback</key>

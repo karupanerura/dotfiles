@@ -11,6 +11,7 @@ case $( $DOTFILES_EXTLIB/bin/ostype ) in
         alias la="ls -Ga"
         alias ll="ls -GlA"
         alias watch=-watch-simple
+        alias eject="drutil tray eject"
         ;;
     *)
         alias ls="ls -hbF --color=auto"

@@ -4,12 +4,20 @@ use strict;
 use warnings;
 use utf8;
 
+use constant DRY_RUN => $ENV{DRY_RUN};
+
 BEGIN {## hack for echo
     use File::Spec;
 
     *CORE::GLOBAL::system = sub {
         print(join(' ', @_), "\n");
+        return if DRY_RUN;
         CORE::system(@_);
+    };
+    *CORE::GLOBAL::mkdir = sub {
+        print(join(' ', 'mkdir', @_), "\n");
+        return if DRY_RUN;
+        CORE::mkdir(@_);
     };
     *CORE::GLOBAL::symlink = sub ($$) {## no critic
         my($src, $dest) = @_;
@@ -17,6 +25,7 @@ BEGIN {## hack for echo
         $dest = File::Spec->rel2abs($dest);
 
         print( join(' ', 'ln', '-s', $src, $dest), "\n" );
+        return if DRY_RUN;
         CORE::symlink $src, $dest;
     };
 
@@ -28,6 +37,7 @@ BEGIN {## hack for echo
             my $super = \&File::Path::mkpath;
             sub {
                 print(join(' ', 'mkdir', '-p', @_), "\n");
+                return if DRY_RUN;
                 $super->(@_);
             };
         };
@@ -41,10 +51,26 @@ BEGIN {## hack for echo
             my $super = \&File::Copy::move;
             sub {
                 print(join(' ', 'mv', @_), "\n");
+                return if DRY_RUN;
                 $super->(@_);
             };
         };
     }
+
+    *CORE::GLOBAL::open = sub {
+        print(join(' ', '[open]', @_[1..$#_]), "\n");
+        if (DRY_RUN) {
+            $_[0] = $_[1] eq '>' ? \*STDOUT : \*STDIN;
+            return 1;
+        }
+        CORE::open(@_);
+    };
+
+    *CORE::GLOBAL::close = sub {
+        print("\n[close]\n");
+        return if DRY_RUN;
+        CORE::close(@_);
+    };
 }
 
 use Carp qw/croak/;

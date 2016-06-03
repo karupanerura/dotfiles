@@ -153,10 +153,6 @@ sub build {
 sub install {
     my $self = shift;
 
-    # dependency
-    my @dependency = qw/bin zsh git prove perltidy screenrc tmuxconf vimrc emacs/;
-    $self->$_ for @dependency;
-
     my $_install = sub {
         my ($self, $name) = @_;
 

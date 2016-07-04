@@ -14,10 +14,15 @@ BEGIN {## hack for echo
         return if DRY_RUN;
         CORE::system(@_);
     };
-    *CORE::GLOBAL::mkdir = sub {
+    *CORE::GLOBAL::mkdir = sub ($;$) {
         print(join(' ', 'mkdir', @_), "\n");
         return if DRY_RUN;
-        CORE::mkdir(@_);
+        if (@_ == 2) {
+            CORE::mkdir($_[0], $_[1]);
+        }
+        else {
+            CORE::mkdir($_[0]);
+        }
     };
     *CORE::GLOBAL::symlink = sub ($$) {## no critic
         my($src, $dest) = @_;
@@ -57,19 +62,20 @@ BEGIN {## hack for echo
         };
     }
 
-    *CORE::GLOBAL::open = sub {
+    *CORE::GLOBAL::open = sub ($$;$) {# no critic
         print(join(' ', '[open]', @_[1..$#_]), "\n");
         if (DRY_RUN) {
             $_[0] = $_[1] eq '>' ? \*STDOUT : \*STDIN;
             return 1;
         }
-        CORE::open(@_);
+        return CORE::open($_[0], $_[1], $_[2]);
     };
 
-    *CORE::GLOBAL::close = sub {
-        print("\n[close]\n");
+    *CORE::GLOBAL::close = sub ($) {
+        print "\n" if DRY_RUN;
+        print "[close]\n";
         return if DRY_RUN;
-        CORE::close(@_);
+        CORE::close($_[0]);
     };
 }
 

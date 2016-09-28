@@ -103,6 +103,28 @@ bindkey '\e[A' history-beginning-search-backward-end
 bindkey '^N'   history-beginning-search-forward-end
 bindkey '\e[B' history-beginning-search-forward-end
 
+## 操作を確認する
+alias rm="rm -i"
+alias cp="cp -i"
+alias mv="mv -i"
+alias crontab="crontab -i"
+
+# ls系alias
+case $( $DOTFILES_EXTLIB/bin/ostype ) in
+    FreeBSD*|Darwin*)
+        alias ls="ls -G"
+        alias la="ls -Ga"
+        alias ll="ls -GlA"
+        alias watch=-watch-simple
+        alias eject="drutil tray eject"
+        ;;
+    *)
+        alias ls="ls -hbF --color=auto"
+        alias la="ls -hbaF --color=auto"
+        alias ll="ls -hblaF --color=auto"
+        ;;
+esac
+
 ## GNU grepがあったら優先して使う。
 if type ggrep > /dev/null 2>&1; then
     alias grep=ggrep

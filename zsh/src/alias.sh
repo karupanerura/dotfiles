@@ -1,25 +1,3 @@
-## 操作を確認する。
-alias rm="rm -i"
-alias cp="cp -i"
-alias mv="mv -i"
-alias crontab="crontab -i"
-
-# ls系alias
-case $( $DOTFILES_EXTLIB/bin/ostype ) in
-    FreeBSD*|Darwin*)
-        alias ls="ls -G"
-        alias la="ls -Ga"
-        alias ll="ls -GlA"
-        alias watch=-watch-simple
-        alias eject="drutil tray eject"
-        ;;
-    *)
-        alias ls="ls -hbF --color=auto"
-        alias la="ls -hbaF --color=auto"
-        alias ll="ls -hblaF --color=auto"
-        ;;
-esac
-
 # minicpan
 if type minicpan > /dev/null 2>&1; then
     alias minicpan-update="minicpan -l ~/.minicpan -r http://cpan.metacpan.org/"
@@ -51,3 +29,8 @@ alias gmt2jst='perl -MTime::Piece -MPOSIX=tzset -E '"'"'$dt=Time::Piece->strptim
 alias jst2local='perl -MTime::Piece -MPOSIX=tzset -E '"'"'$ENV{TZ}="Asia/Tokyo";tzset();$dt=localtime->strptime(join(" ", @ARGV), "%Y-%m-%d %H:%M:%S");delete $ENV{TZ};tzset();say+localtime($dt->epoch)->strftime("%F %T")'"'"''
 alias jst2gmt='perl -MTime::Piece -MPOSIX=tzset -E '"'"'$ENV{TZ}="Asia/Tokyo";tzset();$dt=localtime->strptime(join(" ", @ARGV), "%Y-%m-%d %H:%M:%S");delete $ENV{TZ};tzset();say+gmtime($dt->epoch)->strftime("%F %T")'"'"''
 alias incr-t-index='perl -E '"'"'/^(.*\/)(0*)([0-9]+)(_.*)$/ && rename($_, $3 < 9 ? $1.$2.($3+1).$4 : $1.substr($2, 0, length($2) - 1).($3+1).$4) for @ARGV'"'"''
+
+# anonymity for pbcopy
+alias anonimity-filter="perl -pe 's{\\Q$HOME}{\\\$HOME}g;s{\\Q$USER}{\\\$USER}g'"
+alias pbcopy-raw="`which pbcopy`"
+alias pbcopy="anonimity-filter | pbcopy"

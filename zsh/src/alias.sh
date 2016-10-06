@@ -3,6 +3,17 @@ if type minicpan > /dev/null 2>&1; then
     alias minicpan-update="minicpan -l ~/.minicpan -r http://cpan.metacpan.org/"
 fi
 
+# os別alias
+case $( $DOTFILES_EXTLIB/bin/ostype ) in
+    FreeBSD*|Darwin*)
+        alias watch=-watch-simple
+        alias eject="drutil tray eject"
+        alias lockscreen="open /System/Library/Frameworks/ScreenSaver.framework/Versions/A/Resources/ScreenSaverEngine.app"
+        ;;
+    *)
+        ;;
+esac
+
 ## その他alias
 alias tmux="tmux -2 -L karupas_dev"
 alias scp="scp -C"

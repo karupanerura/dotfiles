@@ -46,6 +46,7 @@
     co                  = checkout
     clean-untracked     = "!git ls-files --others --exclude-standard | xargs rm"
     co-hist-peco        = "!git checkout `git history -n50 | sort | uniq -c | sort -nr | awk '{print $2}' | peco`"
+    co-peco             = "!f () { cd `git rev-parse --git-dir`; find refs/heads -type f | cut -d/ -f 3- | peco; }; git checkout `f`"
     df                  = diff
     dfc                 = diff --cached
     dw                  = diff -w --word-diff

@@ -2,20 +2,20 @@
 set -e
 # set -x
 
-IN_TREE=`git rev-parse --is-inside-work-tree`;
-if [ "$IN_TREE" = "true" ]; then
-    GITROOT=`git rev-parse --show-toplevel`
-    if [ -d $GITROOT ]; then
-        LOGFILE=$GITROOT/.git/info/.branch.log
-        test -d $GITROOT/.git/info || mkdir $GITROOT/.git/info
-        if [ -f $LOGFILE ]; then
-            BRANCH_NAME=`tail -n2 $LOGFILE | head -n1`
-            CURRENT_BRANCH_NAME=`cat $GITROOT/.git/HEAD | cut -d/ -f 3-`
-            echo "Merge branch '$BRANCH_NAME' into $CURRENT_BRANCH_NAME";
+in_tree=`git rev-parse --is-inside-work-tree`;
+if [ "$in_tree" = "true" ]; then
+    gitdir=`git rev-parse --git-dir`
+    if [ -d $gitdir ]; then
+        logfile=$gitdir/info/.branch.log
+        test -d $gitdir/info || mkdir $gitdir/info
+        if [ -f $logfile ]; then
+            branch_name=`tail -n2 $logfile | head -n1`
+            current_branch_name=`cat $gitdir/HEAD | cut -d/ -f 3-`
+            echo "Merge branch '$branch_name' into $current_branch_name";
             while true; do
                 echo -n "ok? (y/n)> "
-                read ANS
-                case $ANS in
+                read answer
+                case $answer in
                     [Yy]|[Yy][Ee][Ss])
                         break ;;
                     [Nn]|[Nn][Oo])
@@ -24,8 +24,7 @@ if [ "$IN_TREE" = "true" ]; then
                         continue ;;
                 esac
             done
-            git merge $BRANCH_NAME
+            git merge $branch_name
         fi
     fi
 fi
-

@@ -2,13 +2,13 @@
 set -e
 # set -x
 
-IN_TREE=`git rev-parse --is-inside-work-tree`;
-if [ "$IN_TREE" = "true" ]; then
-    GITROOT=`git rev-parse --show-toplevel`
-    if [ -d $GITROOT ]; then
-        LOGFILE=$GITROOT/.git/info/.branch.log
-        test -d $GITROOT/.git/info || mkdir $GITROOT/.git/info
-        test -f $LOGFILE           || touch $LOGFILE
-        tail "$@" $LOGFILE
+in_tree=`git rev-parse --is-inside-work-tree`;
+if [ "$in_tree" = "true" ]; then
+    gitdir=`git rev-parse --git-dir`
+    if [ -d $gitdir ]; then
+        logfile=$gitdir/info/.branch.log
+        test -d $gitdir/info || mkdir $gitdir/info
+        test -f $logfile     || touch $logfile
+        tail "$@" $logfile
     fi
 fi

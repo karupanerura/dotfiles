@@ -1,0 +1,13 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+
+my $env = $ENV{PERL_CPANM_OPT};
+$env =~ s/--mirror(?:\s+(?!file:)\S+|=(?:'(?<!file:)[^']+?'|"(?!file:)[^"]+?"))//g;
+$env =~ s/--mirror-only//g;
+$env =~ s/\s{2,}/ /g;
+$env =~ s/^\s+//g;
+$env =~ s/\s+$//g;
+$ENV{PERL_CPANM_OPT} = $env;
+
+exec cpanm => @ARGV;

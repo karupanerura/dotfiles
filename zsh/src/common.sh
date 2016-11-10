@@ -148,7 +148,7 @@ fi
 
 # cpanm
 if type cpanm > /dev/null 2>&1; then
-    export PERL_CPANM_OPT="--prompt --mirror http://ftp.ring.gr.jp/pub/lang/perl/CPAN/ --mirror http://cpan.metacpan.org/"
+    export PERL_CPANM_OPT="--prompt --cascade-search --mirror http://ftp.ring.gr.jp/pub/lang/perl/CPAN/ --mirror http://cpan.metacpan.org/"
 fi
 
 # minicpan

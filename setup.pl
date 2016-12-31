@@ -107,7 +107,6 @@ sub new {
         bin_dir          => catfile($cwd, 'bin'),
         zshrc_src        => catfile($cwd, 'zsh',      'rc.sh'),
         gitconfig_src    => catfile($cwd, 'git',      'config'),
-        git_template_dir => catfile($cwd, 'git',      'template'),
         proverc_src      => catfile($cwd, 'prove',    'rc'),
         perltidyrc_src   => catfile($cwd, 'perltidy', 'rc'),
         tmuxconf_src     => catfile($cwd, 'tmux',     'conf'),
@@ -179,7 +178,6 @@ sub install {
 
     # git
     $self->$_install('.gitconfig');
-    $self->$_install('.git.template');
 
     # proverc
     $self->$_install('.proverc');
@@ -226,7 +224,6 @@ sub git {
     my $self = shift;
 
     symlink $self->{gitconfig_src},    catfile($TEMP, '.gitconfig')    unless -f catfile($TEMP, '.gitconfig');
-    symlink $self->{git_template_dir}, catfile($TEMP, '.git.template') unless -f catfile($TEMP, '.git.template');
 }
 
 sub perl {

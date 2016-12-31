@@ -1,5 +1,0 @@
-#!/bin/sh
-set -e
-# set -x
-
-git save >/dev/null 2>&1 || true

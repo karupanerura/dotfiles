@@ -1,0 +1,46 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use utf8;
+use 5.14.0;
+use File::Spec;
+use URI;
+use URI::Escape qw/uri_escape/;
+
+my $target_commit = shift @ARGV || 'HEAD';
+
+sub slurp {
+    my $file = shift;
+    open my $fh, '<:encoding(utf-8)', $file;
+    local $/;
+    return <$fh>;
+}
+
+sub hosts {
+    my @url = map s/\s+$//sr, <DATA>;
+    my $local = File::Spec->catfile(glob('~'), '.pull-req-able.local');
+    push @url => split /\n/, slurp($local) if -f $local;
+    return @url;
+}
+
+sub remote {
+    chomp(my $remote = `git config --get remote.origin.url`);
+    return URI->new($remote);
+}
+
+sub commit_ref {
+    my $commit = shift;
+    chomp(my $ref = `git rev-parse $commit`);
+    return $ref;
+}
+
+my $remote = remote();
+$remote = URI->new('ssh://'.($remote =~ s!:!/!r)) unless defined $remote->scheme;
+if (grep { $remote->host eq $_ } hosts()) {
+    my $url = sprintf 'http://%s%s/commit/%s', $remote->host, $remote->path =~ s/\.git//r, commit_ref($target_commit);
+    system open => $url if $^O eq 'darwin';
+    say "$url";
+}
+
+__DATA__
+github.com

@@ -36,7 +36,7 @@ sub current_branch {
 my $remote = remote();
 $remote = URI->new('ssh://'.($remote =~ s!:!/!r)) unless defined $remote->scheme;
 if (grep { $remote->host eq $_ } hosts()) {
-    my $url = sprintf 'http://%s%s/compare/%s...%s', $remote->host, $remote->path =~ s/\.git//r, uri_escape($target_branch), uri_escape(current_branch());
+    my $url = sprintf 'http://%s%s/compare/%s...%s', $remote->host, $remote->path =~ s/\.git$//r, uri_escape($target_branch), uri_escape(current_branch());
     say "Open: $url";
     system open => $url if $^O eq 'darwin';
 }

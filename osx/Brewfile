@@ -1,4 +1,3 @@
-tap 'peco/peco'
 tap 'sanemat/font'
 
 brew 'llvm'

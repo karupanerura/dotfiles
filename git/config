@@ -42,9 +42,12 @@
     ci                  = commit
     br                  = branch
     co                  = checkout
+    cor                 = checkout-recursive
+    checkout-recursive  = "git checkout \"$@\" && git submodule update --init --recursive"
     clean-untracked     = "!git ls-files --others --exclude-standard | xargs rm"
     co-hist-peco        = "!git checkout `git history -n50 | sort | uniq -c | sort -nr | awk '{print $2}' | peco`"
     co-peco             = "!f () { cd `git rev-parse --git-dir`; find refs/heads -type f | cut -d/ -f 3- | peco; }; git checkout `f`"
+    co-peco-by-remote   = "!f () { cd `git rev-parse --git-dir`; git branch -r --list  | awk '$1 != \"origin/HEAD\" {print $1}' | cut -d/ -f2- | peco; }; branch=`f`; echo git checkout -b $branch -t origin/$branch"
     df                  = diff
     dfc                 = diff --cached
     dw                  = diff -w --word-diff

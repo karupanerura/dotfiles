@@ -72,6 +72,16 @@ function emacs-server-stop {
     fi
 }
 
+function epoch2jst {
+    local epoch=$1; shift
+    TZ=Asia/Tokyo date -r $epoch +"%Y-%m-%dT%H:%M:%S%z"
+}
+
+function epoch2gmt {
+    local epoch=$1; shift
+    TZ=GMT date -r $epoch +"%Y-%m-%dT%H:%M:%S%z"
+}
+
 function seminar-mode {
     export PROMPT="${PROMPT:s/%%/
 %%}"

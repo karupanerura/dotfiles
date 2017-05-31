@@ -40,6 +40,7 @@ alias gmt2jst='perl -MTime::Piece -MPOSIX=tzset -E '"'"'$dt=Time::Piece->strptim
 alias jst2local='perl -MTime::Piece -MPOSIX=tzset -E '"'"'$ENV{TZ}="Asia/Tokyo";tzset();$dt=localtime->strptime(join(" ", @ARGV), "%Y-%m-%d %H:%M:%S");delete $ENV{TZ};tzset();say+localtime($dt->epoch)->strftime("%F %T")'"'"''
 alias jst2gmt='perl -MTime::Piece -MPOSIX=tzset -E '"'"'$ENV{TZ}="Asia/Tokyo";tzset();$dt=localtime->strptime(join(" ", @ARGV), "%Y-%m-%d %H:%M:%S");delete $ENV{TZ};tzset();say+gmtime($dt->epoch)->strftime("%F %T")'"'"''
 alias incr-t-index='perl -E '"'"'/^(.*\/)(0*)([0-9]+)(_.*)$/ && rename($_, $3 < 9 ? $1.$2.($3+1).$4 : $1.substr($2, 0, length($2) - 1).($3+1).$4) for @ARGV'"'"''
+alias date-peco='env TZ=`find /usr/share/zoneinfo -type f -mindepth 2 | cut -d/ -f 5- | peco` date'
 
 # anonymity for pbcopy
 alias anonimity-filter="perl -pe 's{\\Q$HOME}{\\\$HOME}g;s{\\Q$USER}{\\\$USER}g'"

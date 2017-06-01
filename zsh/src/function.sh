@@ -82,6 +82,14 @@ function epoch2gmt {
     TZ=GMT date -r $epoch +"%Y-%m-%dT%H:%M:%S%z"
 }
 
+function dataurl() {
+    local mimeType=$(file -b --mime-type "$1");
+    if [[ $mimeType == text/* ]]; then
+        mimeType="${mimeType};charset=utf-8";
+    fi
+    echo "data:${mimeType};base64,$(base64 $1)";
+}
+
 function seminar-mode {
     export PROMPT="${PROMPT:s/%%/
 %%}"

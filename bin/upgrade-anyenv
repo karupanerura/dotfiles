@@ -6,7 +6,7 @@ function upgrade {
     cd $1
     echo "### upgrade $1 ..."
     git fetch -qp
-    git pull -q
+    git pull -q origin master
     if [[ -d plugins ]]; then
         for plugin in `find plugins -maxdepth 1 -type d`; do
             [[ $plugin != 'plugins' ]] && upgrade $plugin &

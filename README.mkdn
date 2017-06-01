@@ -1,5 +1,6 @@
 # what is this?
-おれおれdotfiles
+おれおれdotfiles  
+なぜだかわからないけどたくさんstarが付くdotfilesです
 
 # dotfiles
 * .zshrc

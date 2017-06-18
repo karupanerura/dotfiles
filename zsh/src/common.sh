@@ -40,7 +40,9 @@ watch="all"
 setopt ignore_eof
 
 ## ログイン時にはすぐに表示する。
-log
+if eval 'builtin log' > /dev/null 2>&1; then
+    builtin log
+fi
 
 ## ^Dでログアウトしないようにする。
 setopt ignore_eof

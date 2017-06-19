@@ -24,7 +24,7 @@ alias sync='sudo sync && sudo sync && sudo sync'
 alias shutdown='sudo sync && sudo shutdown'
 alias reboot='sudo sync && sudo reboot'
 alias halt='sudo sync && sudo halt'
-alias rot13='tr a-mn-zA-MN-Z0-45-9 n-za-mA-MN-Z5-90-4'
+alias rot13='tr a-mn-zA-MN-Z0-45-9 n-za-mN-ZA-M5-90-4'
 alias strings='strings -a' # CVE-2014-8485
 alias uri-escape="perl -MURI::Escape=uri_escape -pe '\$_ = uri_escape \$_'"
 alias uri-unescape="perl -MURI::Escape=uri_unescape -pe '\$_ = uri_unescape \$_'"

@@ -18,8 +18,8 @@ esac
 alias tmux="tmux -2 -L karupas_dev"
 alias scp="scp -C"
 alias gi="git"
-alias sudo="sudo -H -i"
-alias random-string='perl -MString::Random=random_string -E '"'"'say+random_string(q{s}x($ARGV[0]||10))'"'"''
+alias sudo="sudo -i"
+alias random-string='perl -MSession::Token -E '"'"'say+Session::Token->new(length=>$ARGV[0]||10)->get'"'"''
 alias sync='sudo sync && sudo sync && sudo sync'
 alias shutdown='sudo sync && sudo shutdown'
 alias reboot='sudo sync && sudo reboot'

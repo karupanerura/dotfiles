@@ -1,0 +1,17 @@
+#!/bin/sh
+set -e
+set -u
+
+VERSION=v0.5.1
+
+eval `go tool dist env`
+tempdir=`tempdir`
+curl -fsSL -o $tempdir/peco.tar.gz https://github.com/peco/peco/releases/download/$VERSION/peco_${GOOS}_${GOARCH}.tar.gz
+
+cd $tempdir
+tar zxf peco.tar.gz
+mv peco_*/peco $HOME/local/bin/peco
+chmod +x $HOME/local/bin/peco
+cd $HOME
+
+rm -rf $tempdir

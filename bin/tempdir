@@ -1,0 +1,7 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use File::Temp qw/tempdir/;
+
+my $dirname = tempdir(CLEANUP => 0);
+print $dirname, $/;

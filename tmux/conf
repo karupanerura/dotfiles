@@ -9,7 +9,6 @@ set-window-option -g utf8 on
 set -g status-interval 5
 set -g status-left-length 100
 set -g status-right-length 50
-set -g default-path $HOME
 
 # www1.hoge.com -> www1のみ表示。
 set-option -g set-titles-string "@#(hostname | sed 's/\\\\..*//')"
@@ -49,9 +48,9 @@ bind c new-window
 # 分割していたペインそれぞれをWindowに
 bind b break-pane
 # ペインの縦分割
-bind h split-window -v
+bind h split-window -v -c '#{pane_current_path}'
 # ペインの横分割
-bind v split-window -h
+bind v split-window -h -c '#{pane_current_path}'
 
 # ペイン終了
 bind k kill-pane

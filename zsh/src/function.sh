@@ -22,14 +22,15 @@ function runjava {
     java `echo $JAVA_SRC | sed -e 's/\.java$//'` $*
 }
 
-
-function -watch-simple {
-    while true; do
-        clear
-        echo "watch: $*"
-        $SHELL -c "$*" | head -n `expr $(tput lines) - 2`
-        sleep 2
-    done
+function google() {
+    case $( $DOTFILES_EXTLIB/bin/ostype ) in
+        Darwin*)
+            open https://www.google.co.jp'/search?q='`echo -n "$@" | uri-escape`
+            ;;
+        *)
+            echo https://www.google.co.jp'/search?q='`echo -n "$@" | uri-escape`
+            ;;
+    esac
 }
 
 function plenv-perl-version {

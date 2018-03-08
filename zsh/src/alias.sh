@@ -6,7 +6,6 @@ fi
 # os別alias
 case $( $DOTFILES_EXTLIB/bin/ostype ) in
     FreeBSD*|Darwin*)
-        alias watch=-watch-simple
         alias eject="drutil tray eject"
         alias lockscreen="open /System/Library/Frameworks/ScreenSaver.framework/Versions/A/Resources/ScreenSaverEngine.app"
         ;;
@@ -34,6 +33,7 @@ alias cpandoc-peco='cpandoc `cpan-module-list | peco`'
 alias cpanm-peco='cpanm `cpan-module-list | peco`'
 alias edit-peco='emacs `if [ -d .git ]; then; git ls-files | peco; else; find . -type f | peco; fi`'
 alias project-peco='cd ~/project/`\ls ~/project | peco` && edit-peco'
+alias gocd='cd $GOPATH/src/`find $GOPATH/src -name .git -type d -maxdepth 4 -exec dirname {} \; | perl -pe "s{^$GOPATH/src/}{}" | peco`'
 alias sumup='perl -nE '"'"'$c+=$_}{say$c'"'"''
 alias local2jst='perl -MTime::Piece -MPOSIX=tzset -E '"'"'$dt=localtime->strptime(join(" ", @ARGV), "%Y-%m-%d %H:%M:%S");$ENV{TZ}="Asia/Tokyo";tzset();say+localtime($dt->epoch)->strftime("%F %T")'"'"''
 alias gmt2jst='perl -MTime::Piece -MPOSIX=tzset -E '"'"'$dt=Time::Piece->strptime(join(" ", @ARGV), "%Y-%m-%d %H:%M:%S");$ENV{TZ}="Asia/Tokyo";tzset();say+localtime($dt->epoch)->strftime("%F %T")'"'"''

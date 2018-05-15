@@ -7,7 +7,18 @@ fi
 case $( $DOTFILES_EXTLIB/bin/ostype ) in
     FreeBSD*|Darwin*)
         alias eject="drutil tray eject"
+        ;;
+    *)
+        ;;
+esac
+
+# osバージョン別alias
+case $( $DOTFILES_EXTLIB/bin/ostype ) in
+    Darwin-1[56]*)
         alias lockscreen="open /System/Library/Frameworks/ScreenSaver.framework/Versions/A/Resources/ScreenSaverEngine.app"
+        ;;
+    Darwin*)
+        alias lockscreen="open /System/Library/CoreServices/ScreenSaverEngine.app"
         ;;
     *)
         ;;

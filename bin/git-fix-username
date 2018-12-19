@@ -1,0 +1,37 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+
+use Getopt::Long qw/:config posix_default no_ignore_case bundling/;
+
+GetOptions(
+    'i|inplace' => \my $inplace_mode,
+) or die "Usage: $0 [-i]";
+if ($inplace_mode) {
+    exec $^X, '-i', $0, @ARGV;
+    die $!;
+}
+
+chomp(my $global_name  = `git config --global --includes --get user.name`);
+chomp(my $global_email = `git config --global --includes --get user.email`);
+chomp(my $local_name   = `git config --local  --includes --get user.name`);
+chomp(my $local_email  = `git config --local  --includes --get user.email`);
+
+while (defined($_ = <ARGV>)) {
+    if ($global_name ne $local_name) {
+        s/\Q$global_name\E/$local_name/og;
+    }
+    if ($global_email ne $local_email) {
+        s/\Q$global_email\E/$local_email/og;
+    }
+} continue {
+    print;
+}
+
+unless (defined $^I) {
+    print $/ for 1..3;
+    print '================ HINT ===================', $/;
+    print 'To replace source document, run it with -i option :)', $/;
+    print '=========================================', $/;
+    print $/ for 1..3;
+}

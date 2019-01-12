@@ -10,6 +10,8 @@ use Plack::Loader;
 use Plack::App::Directory;
 use Cwd qw/realpath/;
 
+Plack::MIME->add_type(".wasm" => "application/wasm");
+
 GetOptions(
     'p|port=i' => \my $port,
 ) or exit 1;

@@ -1,4 +1,5 @@
 # 補完機能ON
+fpath=(/usr/local/share/zsh-completions $fpath)
 autoload -Uz compinit; compinit
 
 # 補完するかの質問は画面を超える時にのみに行う｡

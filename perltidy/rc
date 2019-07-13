@@ -9,6 +9,4 @@
 -pt=2   # White space
 -l=128  # Max line width is 128 cols
 -i=4    # Indent level is 4 cols
--st     # Output to STDOUT
--se     # Errors to STDERR
 -wbb="% + - * / x != == >= <= =~ < > | & **= += *= &= <<= &&= -= /= //= |= >>= ||= .= %= ^= x="

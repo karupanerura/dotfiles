@@ -4,10 +4,9 @@ use warnings;
 use utf8;
 use feature qw/say/;
 
-use Getopt::Long ':config' => qw/posix_default no_ignore_case bundling auto_help/;
+use Getopt::Long ':config' => qw/posix_default no_ignore_case bundling/;
 use Net::EmptyPort qw/empty_port/;
 use Plack::Loader;
-use Plack::App::Directory;
 use Cwd qw/realpath/;
 
 Plack::MIME->add_type(".wasm" => "application/wasm");
@@ -21,5 +20,28 @@ my $root = realpath(shift @ARGV || '.');
 system 'open', "http://0.0.0.0:$port/" if $^O eq 'darwin';
 say "HTTP::Server::PSGI: Accepting connections at http://0.0.0.0:$port/";
 say "mount: $root";
-my $app  = Plack::App::Directory->new(root => $root)->to_app;
+
+package My::Plack::App::Directory {
+    use parent qw/Plack::App::Directory/;
+    use File::Spec::Functions;
+
+    sub serve_path {
+        my($self, $env, $dir, $fullpath) = @_;
+
+        if (-f $dir) {
+            return $self->SUPER::serve_path($env, $dir, $fullpath);
+        }
+
+        if ($env->{PATH_INFO} =~ m{/$}) {
+            for my $index_file (qw/index.html/) {
+                my $f = catfile($dir, $index_file);
+                return $self->SUPER::serve_path($env, $f, $fullpath) if -f $f;
+            }
+        }
+
+        return $self->SUPER::serve_path($env, $dir, $fullpath);
+    }
+};
+
+my $app = My::Plack::App::Directory->new(root => $root)->to_app;
 Plack::Loader->auto(port => $port)->run($app);

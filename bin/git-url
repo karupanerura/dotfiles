@@ -7,7 +7,27 @@ use File::Spec;
 use URI;
 use URI::Escape qw/uri_escape/;
 
-my $target_commit = shift @ARGV || 'HEAD';
+my $remote = remote();
+$remote = URI->new('ssh://'.($remote =~ s!:!/!r)) unless defined $remote->scheme;
+if (!grep { $remote->host eq $_ } hosts()) {
+    warn 'Unknown remote host: '.$remote->host;
+    exit 1;
+}
+
+my $target = shift @ARGV || 'HEAD';
+if (-e $target) {
+    my $target_file = $target;
+    chomp(my $branch = `git symbolic-ref HEAD --short`);
+    my $url = sprintf 'http://%s%s/tree/%s/%s', $remote->host, $remote->path =~ s/\.git//r, $branch, $target_file;
+    system open => $url if $^O eq 'darwin';
+    say "$url";
+} else {
+    my $target_commit = $target;
+    my $url = sprintf 'http://%s%s/commit/%s', $remote->host, $remote->path =~ s/\.git//r, commit_ref($target_commit);
+    system open => $url if $^O eq 'darwin';
+    say "$url";
+}
+exit 0;
 
 sub slurp {
     my $file = shift;
@@ -32,14 +52,6 @@ sub commit_ref {
     my $commit = shift;
     chomp(my $ref = `git rev-parse $commit`);
     return $ref;
-}
-
-my $remote = remote();
-$remote = URI->new('ssh://'.($remote =~ s!:!/!r)) unless defined $remote->scheme;
-if (grep { $remote->host eq $_ } hosts()) {
-    my $url = sprintf 'http://%s%s/commit/%s', $remote->host, $remote->path =~ s/\.git//r, commit_ref($target_commit);
-    system open => $url if $^O eq 'darwin';
-    say "$url";
 }
 
 __DATA__

@@ -1,0 +1,91 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use utf8;
+
+use JSON::PP qw/decode_json/;
+use Scalar::Util qw/looks_like_number/;
+use File::Temp qw/tempfile/;
+use File::Which qw/which/;
+use IO::Pipe;
+
+if (@ARGV != 2) {
+    die "Usage: json-diff a.json b.json";
+}
+
+my ($file_a, $file_b) = @ARGV;
+
+my $json_a = load_json($file_a);
+my $json_b = load_json($file_b);
+
+my $data_a = stringify_data_with_path($json_a);
+my $temp_a = File::Temp->new();
+print $temp_a $data_a;
+
+my $data_b = stringify_data_with_path($json_b);
+my $temp_b = File::Temp->new();
+print $temp_b $data_b;
+
+my $diff_cmd = which('colordiff');
+$diff_cmd = which('diff') unless $diff_cmd;
+
+
+my $diff_pipe = IO::Pipe->new();
+$diff_pipe->reader($diff_cmd, '-u', $temp_a->filename, $temp_b->filename);
+
+my $highlight_pipe = \*STDOUT;
+if (my $dhl = which('diff-highlight')) {
+    $highlight_pipe = IO::Pipe->new();
+    $highlight_pipe->writer($dhl);
+}
+
+while (defined($_ = <$diff_pipe>)) {
+    print $highlight_pipe $_;
+}
+
+$temp_a->close();
+$temp_b->close();
+
+exit;
+
+sub load_json {
+    my $file = shift;
+    open my $fh, '<', $file
+        or die $!;
+
+    local $/;
+    return decode_json <$fh>;
+}
+
+sub stringify_data_with_path {
+    my $d = shift;
+    return _stringify_data_with_path('', $d);
+}
+
+sub _stringify_data_with_path {
+    my ($path, $d) = @_;
+
+    if (ref $d eq 'HASH') {
+        my $r = '';
+        for my $k (sort keys %$d) {
+            $r .= _stringify_data_with_path("$path/$k", $d->{$k});
+        }
+        return $r;
+    } elsif (ref $d eq 'ARRAY') {
+        my $r = '';
+        for my $i (keys @$d) {
+            $r .= _stringify_data_with_path("$path/$i", $d->[$i]);
+        }
+        return $r;
+    } elsif (not defined $d) {
+        return "$path\tnull\n";
+    } elsif (JSON::PP::is_bool($d)) {
+        my $s = $d ? 'true' : 'false';
+        return "$path\t$s\n";
+    } elsif (looks_like_number($d)) {
+        return "$path\t$d\n";
+    } else {
+        my $s = qq!"$d"!;
+        return "$path\t$s\n";
+    }
+}

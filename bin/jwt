@@ -1,0 +1,48 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use utf8;
+use feature qw/say/;
+
+use JSON::PP qw/decode_json/;
+use MIME::Base64 qw/decode_base64url/;
+
+my $JSON = JSON::PP->new->utf8->pretty->canonical;
+
+if (-p STDIN) {
+    until (eof STDIN) {
+        chomp($_ = <STDIN>);
+        if (/^[-a-zA-Z0-9_]+\.[-a-zA-Z0-9_]+\.[-a-zA-Z0-9_]+/) {
+            print for map $JSON->encode($_), parse_jwt($_);
+        } else {
+            print;
+            print $/;
+        }
+    }
+} else {
+    print for map $JSON->encode($_), map parse_jwt($_), map try_slurp($_), @ARGV;
+}
+
+exit;
+
+sub parse_jwt {
+    my $jwt = shift;
+    my ($header, $payload, $signature) = split /\./, $jwt;
+    return (
+        decode_json(decode_base64url($header)),
+        decode_json(decode_base64url($payload)),
+        { signature => $signature },
+    );
+}
+
+sub try_slurp {
+    my $target = shift;
+    return $target unless -f $target;
+
+    my $file = $target;
+    open my $fh, '<', $file
+        or die $!;
+
+    local $/;
+    return <$fh>;
+}

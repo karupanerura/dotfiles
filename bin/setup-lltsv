@@ -1,0 +1,9 @@
+#!/bin/bash
+set -ue
+
+version=v0.6.1
+os=$(uname -s | perl -pe '$_=lc$_')
+arch=amd64
+
+curl -sfL https://github.com/sonots/lltsv/releases/download/${version}/lltsv_${os}_${arch} -o ~/local/bin/lltsv
+chmod +x ~/local/bin/lltsv

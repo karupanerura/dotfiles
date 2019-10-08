@@ -123,7 +123,6 @@ bindkey '\e[B' history-beginning-search-forward-end
 alias rm="rm -i"
 alias cp="cp -i"
 alias mv="mv -i"
-alias crontab="crontab -i"
 
 # ls系alias
 case $( $DOTFILES_EXTLIB/bin/ostype ) in

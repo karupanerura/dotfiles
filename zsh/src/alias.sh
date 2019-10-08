@@ -9,6 +9,7 @@ case $( $DOTFILES_EXTLIB/bin/ostype ) in
         alias eject="drutil tray eject"
         ;;
     *)
+        alias crontab="crontab -i"
         ;;
 esac
 

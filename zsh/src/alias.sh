@@ -59,3 +59,7 @@ alias gcd='ghq look `ghq list | peco`'
 alias anonimity-filter="perl -pe 's{\\Q$HOME}{\\\$HOME}g;s{\\Q$USER}{\\\$USER}g'"
 alias pbcopy-raw="`which pbcopy`"
 alias pbcopy="anonimity-filter | pbcopy"
+
+# docker
+alias docker-cleanup='docker ps -a -f "status=exited" -f "status=dead" --format "{{.ID}}" | xargs docker rm'
+alias docker-cleanup-image='docker images -f "dangling=true" --format "{{.ID}}" | xargs docker rmi'

@@ -34,24 +34,52 @@ function google() {
 }
 
 function plenv-perl-version {
-    local dir=$PWD
+    # for asdf
+    if [[ -n $ASDF_DIR ]]; then
+        [[ -n $ASDF_PERL_VERSION ]] && { echo $ASDF_PERL_VERSION; return }
 
-    [[ -n $PLENV_VERSION ]] && { echo $PLENV_VERSION; return }
+        local dir=$PWD
+        while [[ -n $dir && $dir != "/" && $dir != "." ]]; do
+            if [[ -f "$dir/.tool-versions" ]] && grep '^perl[[:space:]]' "$dir/.tool-versions" > /dev/null 2>&1; then
+                grep '^perl[[:space:]]' "$dir/.tool-versions" | cut -d' ' -f2
+                return
+            fi
+            dir=$dir:h
+        done
 
-    while [[ -n $dir && $dir != "/" && $dir != "." ]]; do
-        if [[ -f "$dir/.perl-version" ]]; then
-            head -n 1 "$dir/.perl-version"
+        if [[ -f "$HOME/.tool-versions" ]] && grep '^perl[[:space:]]' "$HOME/.tool-versions" > /dev/null 2>&1; then
+            grep '^perl[[:space:]]' "$HOME/.tool-versions" | cut -d' ' -f2
             return
         fi
-        dir=$dir:h
-    done
 
-    local plenv_home=$PLENV_HOME
-    [[ -z $PLENV_HOME && -n $HOME ]] && plenv_home="$HOME/.plenv"
-
-    if [[ -f "$plenv_home/version" ]]; then
-        head -n 1 "$plenv_home/version"
+        echo 'system'
+        return
     fi
+
+    # for plenv
+    if [[ -d $HOME/.plenv ]]; then
+        [[ -n $PLENV_VERSION ]] && { echo $PLENV_VERSION; return }
+
+        local dir=$PWD
+        while [[ -n $dir && $dir != "/" && $dir != "." ]]; do
+            if [[ -f "$dir/.perl-version" ]]; then
+                head -n 1 "$dir/.perl-version"
+                return
+            fi
+            dir=$dir:h
+        done
+
+        local plenv_home=$PLENV_HOME
+        [[ -z $PLENV_HOME && -n $HOME ]] && plenv_home="$HOME/.plenv"
+
+        if [[ -f "$plenv_home/version" ]]; then
+            head -n 1 "$plenv_home/version"
+        fi
+    fi
+
+    # fallback to system perl
+    echo 'system'
+    return
 }
 
 function emacs-server-start {

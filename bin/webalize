@@ -12,13 +12,15 @@ use Cwd qw/realpath/;
 Plack::MIME->add_type(".wasm" => "application/wasm");
 
 GetOptions(
+    'h|host=s' => \my $host,
     'p|port=i' => \my $port,
 ) or exit 1;
+$host = '0.0.0.0'    unless $host;
 $port = empty_port() unless $port;
 
 my $root = realpath(shift @ARGV || '.');
-system 'open', "http://0.0.0.0:$port/" if $^O eq 'darwin';
-say "HTTP::Server::PSGI: Accepting connections at http://0.0.0.0:$port/";
+system 'open', "http://$host:$port/" if $^O eq 'darwin';
+say "HTTP::Server::PSGI: Accepting connections at http://$host:$port/";
 say "mount: $root";
 
 package My::Plack::App::Directory {
@@ -44,4 +46,4 @@ package My::Plack::App::Directory {
 };
 
 my $app = My::Plack::App::Directory->new(root => $root)->to_app;
-Plack::Loader->auto(port => $port)->run($app);
+Plack::Loader->auto(host => $host, port => $port)->run($app);

@@ -1,7 +1,11 @@
 [include]
     path = .gitconfig.local
+[includeIf "gitdir:~/.go/src/github.com/"]
+     path = ~/.gitconfig.public
+[includeIf "gitdir:~/src/github.com/"]
+     path = ~/.gitconfig.public
 [core]
-    editor = emacsclient -nw
+    editor = vim
     pager  = less
     whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
     excludesfile = ~/.gitignore
@@ -30,6 +34,7 @@
     autosetuprebase = always
 [rebase]
     stat = true
+    autosquash = true
 [merge]
     stat = true
     ff   = false
@@ -46,8 +51,8 @@
     checkout-recursive  = "git checkout \"$@\" && git submodule update --init --recursive"
     clean-untracked     = "!git ls-files --others --exclude-standard | xargs rm"
     co-hist-peco        = "!git checkout `git history -n50 | sort | uniq -c | sort -nr | awk '{print $2}' | peco`"
-    co-peco             = "!f () { cd `git rev-parse --git-dir`; find refs/heads -type f | cut -d/ -f 3- | peco; }; git checkout `f`"
-    co-peco-by-remote   = "!f () { cd `git rev-parse --git-dir`; git branch -r --list  | awk '$1 != \"origin/HEAD\" {print $1}' | cut -d/ -f2- | peco; }; branch=`f`; echo git checkout -b $branch -t origin/$branch"
+    co-peco             = "!f () { cd `git rev-parse --git-dir`; find refs/heads -type f | cut -d/ -f 3- | peco; }; git switch `f`"
+    co-peco-by-remote   = "!f () { cd `git rev-parse --git-dir`; git branch -r --list  | awk '$1 != \"origin/HEAD\" {print $1}' | cut -d/ -f2- | peco; }; branch=`f`; git switch -t origin/$branch || git switch $branch"
     df                  = diff
     dfc                 = diff --cached
     dw                  = diff -w --word-diff
@@ -56,16 +61,10 @@
     url                 = config --get remote.origin.url
     tree                = log --graph --pretty='format:%C(yellow)%h%Creset %s %Cgreen(%an)%Creset %Cred%d%Creset'
     wt                  = whatchanged --stat
-    edit                = "!f() { git status --porcelain | awk '{print $2}' | perl -pe 's!^!`git rev-parse --show-cdup`=~s/\n//r!eg' | peco ; }; emacs `f`"
-    edit-unmerged       = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; emacs `f`"
-    add-unmerged        = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`"
     ck                  = "!git --no-pager diff --diff-filter=ACMRX --name-only --no-color HEAD | egrep '\\.(t|p([lm]|sgi))$' | xargs -n 1 -P2 perl -wc"
     fetch-pulls         = fetch origin +refs/pull/*:refs/remotes/pull/*
-    fetch-all           = "!find ~/project -maxdepth 3 -name .git -type d | xargs -P3 -n1 -I% git --git-dir=% fetch"
     branch-name         = symbolic-ref --short HEAD
     cv                  = "!f() { git cherry \"$@\" | perl -ane 'print $F[0], \" \", `git --no-pager show --date=short --no-notes --pretty=\"%h %Cgreen%cd %Cblue%cn%x09%Creset%s\" -s $F[1]`' ; }; f"
-    new-branch          = "!f() { BRANCH_NAME=$1; git fetch && git co -b $BRANCH_NAME origin/master && git push -u origin $BRANCH_NAME; }; f \"$@\""
-    back                = checkout -
     history             = "!f() { git --no-pager reflog | awk '$3 == \"checkout:\" && /moving from/ {print $8}' | uniq | head \"$@\"; }; f \"$@\""
     log-ticket-id       = "!f() { git log --format=%s \"$@\" | perl -ne 'print if /refs #([0-9]+)/ && $tid != $1 and $tid = $1' | head -n10 ; }; f \"$@\""
     rollback-typechange = "!git diff --name-only --diff-filter=T \"$@\" | xargs git co --"
@@ -93,3 +92,9 @@
     required = true
     clean = git-lfs clean -- %f
     smudge = git-lfs smudge -- %f
+[lfs "https://github.com"]
+    locksverify = true
+[ghq]
+     root = "~/src"
+[init]
+    defaultBranch = main

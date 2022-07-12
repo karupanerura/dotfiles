@@ -1,0 +1,107 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use feature qw/say/;
+
+use constant {
+    AWS_IP_RANGE_URL => 'https://ip-ranges.amazonaws.com/ip-ranges.json',
+    CACHE_PATH       => (glob '~/.aws-ip-check-cache/'),
+
+    CACHE_EXPIRATION_FOR_REVALIDATE => 10, # seconds
+};
+
+use HTTP::Tiny;
+use HTTP::Date;
+use Net::SSLeay 1.49 (); # required to use TLS request by HTTP::Tiny
+use IO::Socket::SSL 1.42 (); # required to use TLS request by HTTP::Tiny
+use JSON::PP qw/encode_json decode_json/;
+use Net::IP::Match::Trie;
+
+my $matcher = Net::IP::Match::Trie->new();
+{
+    my $ip_range = get_aws_ip_range();
+
+    for my $def (@{ $ip_range->{prefixes} }) {
+        next if $def->{service} eq 'AMAZON';
+        $matcher->add($def->{service} => [$def->{ip_prefix}]);
+    }
+    for my $def (@{ $ip_range->{prefixes} }) {
+        next if $def->{service} ne 'AMAZON';
+        next if $matcher->match_ip($def->{ip_prefix} =~ s!/[0-9]+$!!r);
+        $matcher->add($def->{service} => [$def->{ip_prefix}]);
+    }
+}
+
+for my $ip (@ARGV) {
+    my $result = $matcher->match_ip($ip) || 'non AWS service';
+    say "$result\t$ip";
+}
+
+sub get_aws_ip_range {
+    my $cache_info = CACHE_PATH.'ip-ranges.cache';
+    my $cache_data = CACHE_PATH.'ip-ranges.json';
+
+    my $read_from_cache = sub {
+        open my $fh, '<', $cache_data
+            or return;
+
+        local $/;
+        return decode_json(<$fh>);
+    };
+
+    my $update_cache = sub {
+        my $res = shift;
+
+        my $fh;
+        open $fh, '>', "$cache_data.tmp" or return;
+        print $fh $res->{content};
+        close $fh or return;
+
+        open $fh, '>', "$cache_info.tmp" or return;
+        print $fh encode_json({
+            last_modified => $res->{headers}->{'last-modified'},
+            etag          => $res->{headers}->{'etag'},
+        });
+        close $fh or return;
+
+        rename "$cache_data.tmp", $cache_data;
+        rename "$cache_info.tmp", $cache_info;
+    };
+
+    my %headers;
+    if (-f $cache_info && -f $cache_data) {
+        open my $fh, '<', $cache_info;
+
+        local $/;
+        my $info = decode_json(<$fh>);
+        $headers{'If-Modified-Since'} = $info->{last_modified} if $info->{last_modified};
+        $headers{'If-None-Match'}     = $info->{etag}          if $info->{etag};
+    }
+
+    my $ua = HTTP::Tiny->new(
+        timeout => 3,
+        agent   => 'aws-ip-check.pl',
+    );
+
+    my $res = $ua->get(AWS_IP_RANGE_URL, {
+        headers => \%headers,
+    });
+    if ($res->{status} == 304) {
+        my $data = $read_from_cache->();
+        return $data if $data;
+    } elsif ($res->{status} != 200) {
+        my $data = $read_from_cache->();
+        if ($data) {
+            warn '[WARN] AWS IP Ranges API is unavailable, cached ip range is used.';
+            return $data;
+        }
+        require Data::Dumper;
+        warn Data::Dumper::Dumper($res);
+        die "[CRIT] AWS IP Ranges API is unavailable";
+    }
+
+    $update_cache->($res);
+
+    my $content = $res->{content};
+    return decode_json($content);
+}

@@ -1,6 +1,8 @@
 # minicpan
 if type minicpan > /dev/null 2>&1; then
-    alias minicpan-update="minicpan -l ~/.minicpan -r http://cpan.metacpan.org/"
+    if ! which minicpan-update > /dev/null 2>&1; then
+        alias minicpan-update="minicpan -l ~/.minicpan -r http://cpan.metacpan.org/"
+    fi
 fi
 
 # os別alias

@@ -24,6 +24,7 @@ path=(
     $HOME/bin
     $HOME/local/bin
     $DOTFILES_EXTLIB/bin
+    $HOME/Library/Application\ Support/JetBrains/Toolbox/scripts
     $path
 )
 

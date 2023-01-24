@@ -5,6 +5,11 @@ if type minicpan > /dev/null 2>&1; then
     fi
 fi
 
+# VSCode
+if [ -d "/Applications/Visual Studio Code.app" ]; then
+    alias code="/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code"
+fi
+
 # os別alias
 case $( $DOTFILES_EXTLIB/bin/ostype ) in
     FreeBSD*|Darwin*)

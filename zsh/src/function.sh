@@ -82,25 +82,6 @@ function plenv-perl-version {
     return
 }
 
-function emacs-server-start {
-    if ps x | grep emacs | grep '\--daemon' > /dev/null 2>&1; then
-        echo "[INFO] lived 'emacs --daemon'"
-    else
-        echo "[INFO] start 'emacs --daemon'"
-        env emacs --daemon
-    fi
-}
-
-function emacs-server-stop {
-    if ps x | grep emacs | grep '\--daemon' > /dev/null 2>&1; then
-        echo "[INFO] stop  'emacs --daemon'"
-        emacsclient -e '(server-force-delete)'
-        ps x | grep emacs | grep '\--daemon' | awk '{print $1}' | xargs kill
-    else
-        echo "[INFO] not lived 'emacs --daemon'";
-    fi
-}
-
 function epoch2jst {
     local epoch=$1; shift
     TZ=Asia/Tokyo date -r $epoch +"%Y-%m-%dT%H:%M:%S%z"
@@ -116,7 +97,7 @@ function dataurl() {
     if [[ $mimeType == text/* ]]; then
         mimeType="${mimeType};charset=utf-8";
     fi
-    echo "data:${mimeType};base64,$(base64 $1)";
+    echo "data:${mimeType};base64,$(base64 $1 | tr '/+' '_-' | tr -d '=')";
 }
 
 function seminar-mode {
@@ -127,11 +108,6 @@ function seminar-mode {
 function normal-mode {
     export PROMPT="${PROMPT:s/
 %%/%%}"
-}
-
-function emacs-server-restart {
-    emacs-server-stop;
-    emacs-server-start;
 }
 
 ## tmuxで新しいペインで実行したいとき用

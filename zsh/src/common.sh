@@ -29,18 +29,15 @@ path=(
 )
 
 # OS X
-case $( $DOTFILES_EXTLIB/bin/ostype ) in
-    Darwin*)
-        path=(
-            $path
-            /usr/local/share/git-core/contrib/diff-highlight
-            /usr/local/share/git-core/contrib/git-jump
-            /usr/local/share/git-core/contrib/stats
-            /usr/local/share/git-core/contrib/subtree
-        )
-        ;;
-esac
-
+if type brew &>/dev/null; then
+    path=(
+        $path
+        $(brew --prefix)/share/git-core/contrib/diff-highlight
+        $(brew --prefix)/share/git-core/contrib/git-jump
+        $(brew --prefix)/share/git-core/contrib/stats
+        $(brew --prefix)/share/git-core/contrib/subtree
+    )
+fi
 
 # 履歴ファイルに時刻を記録
 setopt extended_history

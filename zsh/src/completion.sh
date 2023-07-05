@@ -1,6 +1,11 @@
 # 補完機能ON
-fpath=(/usr/local/share/zsh-completions $fpath)
-autoload -Uz compinit; compinit
+if type brew &>/dev/null; then
+  fpath=($(brew --prefix)/share/zsh-completions $fpath)
+else
+  fpath=(/usr/local/share/zsh-completions $fpath)
+fi
+autoload -Uz compinit
+compinit
 
 # 補完するかの質問は画面を超える時にのみに行う｡
 LISTMAX=0

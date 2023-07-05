@@ -3,6 +3,7 @@ package MyDotfiles::Builder;
 use strict;
 use warnings;
 use utf8;
+use autodie;
 
 use constant DRY_RUN => $ENV{DRY_RUN};
 
@@ -186,13 +187,13 @@ sub install {
     $self->$_install('.perltidyrc');
 
     # tmuxconf
-    $self->$_install('.tmux.conf');
+    # $self->$_install('.tmux.conf');
 
     # screenrc
-    $self->$_install('.screenrc');
+    # $self->$_install('.screenrc');
 
     # vimrc
-    $self->$_install('.vimrc');
+    # $self->$_install('.vimrc');
 
     # emacs
     $self->$_install('.emacs.d');
@@ -211,13 +212,10 @@ sub zsh {
 }
 
 sub osx {
-    system q{ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"};
-    system q{brew tap Homebrew/bundle};
-    system q{cd osx; brew bundle; cd ..};
-    system q{echo /usr/local/bin/zsh | sudo -H bash -c 'cat >> /etc/shells'};
-    system sudo => -H => chsh => -s => '/usr/local/bin/zsh', $ENV{USER};
-    system q{cp -f /usr/local/share/fonts/Ricty*.ttf ~/Library/Fonts/};
-    system q{fc-cache -vf};
+    system q{$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"};
+    system q{./osx/setup.sh};
+    system q{echo $(brew --prefix)/bin/zsh | sudo tee -a /etc/shells'};
+    system q{sudo chsh -s $(brew --prefix)/bin/zsh $USER};
 }
 
 sub git {
@@ -262,7 +260,7 @@ sub vimrc {
     my $self = shift;
 
     symlink $self->{vimrc_src}, catfile($TEMP, '.vimrc') unless -f catfile($TEMP, '.vimrc');
-    system 'git', 'clone', 'git://github.com/Shougo/neobundle.vim', catfile($HOME, '.vim', 'bundle', 'neobundle.vim');
+    # system 'git', 'clone', 'git://github.com/Shougo/neobundle.vim', catfile($HOME, '.vim', 'bundle', 'neobundle.vim');
 }
 
 sub emacs {

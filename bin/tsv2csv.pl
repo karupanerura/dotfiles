@@ -10,8 +10,7 @@ my $file = shift;
 open my $fh, '<', $file
     or die $!;
 
-
-my $csv = Text::CSV_XS->new({ binary => 1, auto_diag => 1 });
+my $csv = Text::CSV_XS->new({ binary => 1, auto_diag => 1, escape_char => "\\" });
 until (eof $fh) {
     my $line = <$fh>;
     chomp $line;

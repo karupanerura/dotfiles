@@ -3,6 +3,7 @@ use strict;
 use warnings;
 use utf8;
 
+use Encode qw/encode_utf8/;
 use JSON::PP qw/decode_json/;
 use Scalar::Util qw/looks_like_number/;
 use File::Temp qw/tempfile/;
@@ -20,11 +21,11 @@ my $json_b = load_json($file_b);
 
 my $data_a = stringify_data_with_path($json_a);
 my $temp_a = File::Temp->new();
-print $temp_a $data_a;
+print $temp_a encode_utf8($data_a);
 
 my $data_b = stringify_data_with_path($json_b);
 my $temp_b = File::Temp->new();
-print $temp_b $data_b;
+print $temp_b encode_utf8($data_b);
 
 my $diff_cmd = which('colordiff');
 $diff_cmd = which('diff') unless $diff_cmd;

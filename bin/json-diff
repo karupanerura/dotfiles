@@ -7,7 +7,6 @@ use Encode qw/encode_utf8/;
 use JSON::PP qw/decode_json/;
 use Scalar::Util qw/looks_like_number/;
 use File::Temp qw/tempfile/;
-use File::Which qw/which/;
 use IO::Pipe;
 
 if (@ARGV != 2) {
@@ -48,6 +47,13 @@ $temp_a->close();
 $temp_b->close();
 
 exit;
+
+sub which {
+    my $cmd = shift;
+    my $path = `which $cmd`;
+    chomp $path;
+    return $path;
+}
 
 sub load_json {
     my $file = shift;

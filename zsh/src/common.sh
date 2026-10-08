@@ -102,9 +102,6 @@ setopt inc_append_history
 ## Emacsキーバインドを使う。
 bindkey -e
 
-## ディレクトリが変わったらディレクトリスタックを表示。
-chpwd_functions=($chpwd_functions dirs)
-
 ## cdで移動してもpushdと同じようにディレクトリスタックに追加する。
 setopt auto_pushd
 

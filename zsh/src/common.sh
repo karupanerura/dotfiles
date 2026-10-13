@@ -45,14 +45,17 @@ setopt extended_history
 ## jobsでプロセスIDも出力する。
 setopt long_list_jobs
 
-## 全てのユーザのログイン・ログアウトを監視する。
-watch="all"
+## 全てのユーザのログイン・ログアウトを監視する (対話シェルのみ)。
+## エージェントのシェルでは通知がコマンドの出力に混ざるため外す
+if [[ -n $DOTFILES_INTERACTIVE ]]; then
+    watch="all"
+fi
 
 ## ^Dでログアウトしないようにする。
 setopt ignore_eof
 
-## ログイン時にはすぐに表示する。
-if eval 'builtin log' > /dev/null 2>&1; then
+## ログイン時にはすぐに表示する (対話シェルのみ)。
+if [[ -n $DOTFILES_INTERACTIVE ]] && eval 'builtin log' > /dev/null 2>&1; then
     builtin log
 fi
 
@@ -102,6 +105,11 @@ setopt inc_append_history
 ## Emacsキーバインドを使う。
 bindkey -e
 
+## ディレクトリが変わったらディレクトリスタックを表示。
+if [[ -n "$DOTFILES_INTERACTIVE" ]]; then
+    chpwd_functions=($chpwd_functions dirs)
+fi
+
 ## cdで移動してもpushdと同じようにディレクトリスタックに追加する。
 setopt auto_pushd
 
@@ -114,10 +122,37 @@ bindkey '\e[A' history-beginning-search-backward-end
 bindkey '^N'   history-beginning-search-forward-end
 bindkey '\e[B' history-beginning-search-forward-end
 
-## 操作を確認する
-alias rm="rm -i"
-alias cp="cp -i"
-alias mv="mv -i"
+## 操作を確認する (対話シェルのみ)
+## Claude Code など非対話の実行では -i が stdin の EOF で「何もしない」まま
+## exit 0 になり、復元や削除が黙って失敗するため外す
+if [[ -n $DOTFILES_INTERACTIVE ]]; then
+    alias rm="rm -i"
+    alias cp="cp -i"
+    alias mv="mv -i"
+fi
+
+## macOS の mktemp は TMPDIR を無視して DARWIN_USER_TEMP_DIR (/var/folders/...)
+## に作る。Claude Code のサンドボックスはそこに書けないため、テンプレート
+## 無し (引数なし / -d / -t prefix) のときだけ TMPDIR 配下を既定にする。
+## テンプレートがあるときは付けない (-p があると macOS は絶対パスの
+## テンプレートまで tmpdir 相対に解釈して壊れる)
+if [[ -n ${CLAUDECODE:-} ]]; then
+    mktemp() {
+        local arg prev= has_template=
+        for arg in "$@"; do
+            case $prev in
+                -t|-p) ;;
+                *) [[ $arg != -* ]] && has_template=1 ;;
+            esac
+            prev=$arg
+        done
+        if [[ -n $has_template ]]; then
+            command mktemp "$@"
+        else
+            command mktemp -p "${TMPDIR:-/tmp}" "$@"
+        fi
+    }
+fi
 
 # ls系alias
 case $( $DOTFILES_EXTLIB/bin/ostype ) in

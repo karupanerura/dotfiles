@@ -16,7 +16,9 @@ case $( $DOTFILES_EXTLIB/bin/ostype ) in
         alias eject="drutil tray eject"
         ;;
     *)
-        alias crontab="crontab -i"
+        if [[ -n $DOTFILES_INTERACTIVE ]]; then
+            alias crontab="crontab -i"
+        fi
         ;;
 esac
 
